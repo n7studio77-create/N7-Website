@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com; media-src 'self' https: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+<title>N7 STUDIO — Independent Game Studio</title>
+<meta name="description" content="N7 STUDIO is an independent game studio building worlds that linger after the screen goes dark.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — warm light theme, dark orange primary, light orange secondary
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#fbf8f3;
+  --bg-2:#f4ede2;
+  --panel:#ffffff;
+  --panel-2:#fdfaf6;
+  --line:rgba(36,28,21,.09);
+  --line-2:rgba(36,28,21,.17);
+  --ink:#241c15;
+  --ink-2:#4a4038;
+  --muted:#7d7064;
+  --muted-2:#a3968a;
+  --gold:#c2571e;
+  --gold-soft:#e8722f;
+  --gold-dim:rgba(194,87,30,.18);
+  --secondary:#ffd9b8;
+  --secondary-soft:#fff1e4;
+  --danger:#c9413a;
+  --ok:#3f9a63;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.22,.7,.24,1);
+  --r-sm:6px;
+  --r:10px;
+  --r-lg:14px;
+  --shadow-sm:0 1px 2px rgba(60,40,20,.04);
+  --shadow:0 18px 40px -24px rgba(70,45,20,.28);
+  --shadow-lg:0 32px 70px -34px rgba(70,45,20,.32);
+}
+html[lang="ar"]{
+  --serif:'Amiri','Cormorant Garamond',serif;
+  --sans:'Tajawal','Inter',system-ui,sans-serif;
+}
+html[lang="ar"] *{letter-spacing:0 !important}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.7;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+::selection{background:var(--secondary);color:var(--ink)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg-2)}
+::-webkit-scrollbar-thumb{background:#d9ccbd;border-radius:8px;border:2px solid var(--bg-2)}
+::-webkit-scrollbar-thumb:hover{background:#c8b8a6}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;transition:padding .35s var(--ease),background .35s var(--ease),border-color .35s;
+  border-bottom:1px solid transparent;
+}
+.nav.solid{
+  padding:13px 40px;background:rgba(251,248,243,.86);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom-color:var(--line);
+}
+.brand{display:flex;align-items:center;gap:13px;cursor:pointer}
+.brand-mark{
+  width:28px;height:28px;flex:0 0 auto;position:relative;
+  border:1px solid var(--gold-dim);border-radius:6px;transform:rotate(45deg);
+  display:grid;place-items:center;transition:.45s var(--ease);
+}
+.brand-mark::after{
+  content:'';width:9px;height:9px;border-radius:2px;background:var(--gold);transition:.45s var(--ease);
+}
+.brand:hover .brand-mark{border-color:var(--gold);transform:rotate(135deg)}
+.brand:hover .brand-mark::after{transform:rotate(-135deg) scale(.85)}
+.brand-word{
+  font-family:var(--serif);font-size:19px;letter-spacing:.24em;
+  text-transform:uppercase;font-weight:600;color:var(--ink);
+}
+.brand-word small{display:block;font-family:var(--sans);font-size:8.5px;letter-spacing:.32em;color:var(--muted-2);font-weight:400}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{
+  position:relative;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);transition:color .25s;padding:4px 0;font-weight:500;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--gold);
+  border-radius:2px;transition:width .3s var(--ease);
+}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-cta{display:flex;align-items:center;gap:12px}
+
+.lang-toggle{
+  display:flex;align-items:center;gap:5px;
+  background:var(--panel);border:1px solid var(--line-2);border-radius:100px;
+  padding:8px 13px;cursor:pointer;font-family:var(--sans);font-size:10.5px;
+  letter-spacing:.08em;color:var(--muted);transition:.25s var(--ease);line-height:1;font-weight:500;
+}
+.lang-toggle:hover{border-color:var(--gold);color:var(--ink)}
+.lang-toggle .lang-opt{transition:color .25s;padding:0 2px}
+.lang-toggle .lang-opt.on{color:var(--gold);font-weight:700}
+.lang-toggle .lang-sep{opacity:.4}
+html[lang="ar"] .lang-toggle .lang-opt,
+html[lang="ar"] .lang-toggle .lang-sep{letter-spacing:0}
+
+.access-link{
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;
+  border:1px solid var(--line-2);border-radius:100px;padding:9px 18px;transition:.25s var(--ease);
+  background:var(--panel);
+}
+.access-link:hover{color:var(--gold);border-color:var(--gold);background:var(--secondary-soft)}
+
+.burger{display:none;width:42px;height:36px;background:var(--panel);border:1px solid var(--line-2);border-radius:8px;cursor:pointer;position:relative;z-index:95;padding:0}
+.burger span{display:block;height:1.5px;background:var(--ink);margin:5px 10px;border-radius:2px;transition:.35s var(--ease)}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+.mobile-menu{
+  position:fixed;inset:0;z-index:85;background:rgba(251,248,243,.98);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease);
+}
+.mobile-menu.open{opacity:1;pointer-events:auto}
+.mobile-menu a{
+  font-family:var(--serif);font-size:32px;font-weight:500;
+  color:var(--ink);padding:10px 0;opacity:.85;transition:.25s;
+}
+.mobile-menu a:hover{opacity:1;color:var(--gold)}
+.mobile-menu .mobile-lang{margin-top:26px;display:flex;align-items:center;gap:10px;font-family:var(--sans);font-size:13px}
+.mobile-menu .mobile-lang button{
+  background:var(--panel);border:1px solid var(--line-2);color:var(--muted);border-radius:100px;
+  padding:9px 20px;font-size:11px;letter-spacing:.1em;cursor:pointer;transition:.25s;font-weight:500;
+}
+.mobile-menu .mobile-lang button.on{color:#fff;border-color:var(--gold);background:var(--gold)}
+
+/* ============================================================
+   BUTTONS & SHARED
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 28px;border:1px solid var(--line-2);border-radius:var(--r-sm);
+  background:var(--panel);color:var(--ink);
+  font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:.25s var(--ease);white-space:nowrap;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold);background:var(--secondary-soft)}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#fff}
+.btn.primary:hover{background:var(--gold-soft);border-color:var(--gold-soft);color:#fff;box-shadow:0 12px 28px -14px rgba(194,87,30,.7)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--gold);padding-left:0;padding-right:0}
+.btn.ghost:hover{color:var(--gold-soft);background:transparent;box-shadow:none}
+.btn.sm{padding:8px 16px;font-size:10px;border-radius:var(--r-sm)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+html[lang="ar"] .eyebrow{font-size:13px;letter-spacing:0;font-weight:500}
+
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-.005em;line-height:1.1;margin:0;color:var(--ink)}
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] h4{line-height:1.4;font-weight:700}
+.display{font-family:var(--serif);font-weight:500}
+.muted{color:var(--muted)}
+.tiny{font-size:12.5px;letter-spacing:.01em}
+
+main#view{position:relative;z-index:3}
+.wrap{max-width:1300px;margin:0 auto;padding:0 40px}
+.section{padding:110px 0;position:relative}
+.section.tight{padding:70px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:48px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(1.9rem,3.6vw,2.9rem);max-width:18ch}
+.sec-head p{color:var(--muted);max-width:42ch;margin:0;font-size:15px;line-height:1.7}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.07s}.reveal.d2{transition-delay:.14s}.reveal.d3{transition-delay:.21s}.reveal.d4{transition-delay:.28s}
+
+/* HERO */
+.hero{
+  position:relative;padding:150px 0 90px;overflow:hidden;
+  background:
+    radial-gradient(760px 460px at 10% -6%, rgba(232,114,47,.11), transparent 62%),
+    radial-gradient(680px 480px at 94% 16%, rgba(255,217,184,.6), transparent 66%);
+}
+.hero-grid{max-width:1300px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1.06fr .94fr;gap:64px;align-items:center}
+.hero h1{font-size:clamp(2.7rem,5.8vw,5rem);font-weight:500;letter-spacing:.02em;margin:20px 0 0;line-height:1.02}
+html[lang="ar"] .hero h1{line-height:1.25;letter-spacing:0;font-weight:700}
+.hero .tagline{
+  font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,2vw,1.5rem);
+  color:var(--muted);max-width:34ch;margin:22px 0 0;line-height:1.6;font-weight:400;
+}
+html[lang="ar"] .hero .tagline{font-style:normal;max-width:30ch;line-height:1.9}
+.hero-actions{display:flex;gap:12px;margin-top:38px;flex-wrap:wrap}
+.hero-copy > *{animation:heroIn .9s var(--ease) both}
+.hero-copy > *:nth-child(2){animation-delay:.06s}
+.hero-copy > *:nth-child(3){animation-delay:.12s}
+.hero-copy > *:nth-child(4){animation-delay:.18s}
+@keyframes heroIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.hero-visual{position:relative;cursor:pointer;animation:heroIn 1s var(--ease) .1s both}
+.hero-frame{position:relative;aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-lg)}
+.hero-frame > div{position:absolute;inset:0;transition:transform 1.2s var(--ease)}
+.hero-visual:hover .hero-frame > div{transform:scale(1.045)}
+.hero-caption{
+  position:absolute;left:16px;right:16px;bottom:16px;display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;
+}
+.hero-caption .chip{margin:0;flex:0 0 auto}
+.hero-caption-title{font-size:13.5px;font-weight:600;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-caption-arrow{color:var(--gold);transition:transform .3s var(--ease)}
+.hero-visual:hover .hero-caption-arrow{transform:translateX(3px)}
+html[dir="rtl"] .hero-visual:hover .hero-caption-arrow{transform:translateX(-3px)}
+
+.intro-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:70px;align-items:center}
+.intro-copy p{font-size:16.5px;line-height:1.9;color:var(--ink-2);margin:0 0 20px;max-width:54ch}
+html[lang="ar"] .intro-copy p{line-height:2}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px 26px;transition:.25s var(--ease);box-shadow:var(--shadow-sm)}
+.stat:hover{border-color:rgba(194,87,30,.28);transform:translateY(-2px);box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--serif);font-size:40px;font-weight:600;color:var(--gold);line-height:1}
+.stat span{display:block;margin-top:10px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+html[lang="ar"] .stat span{letter-spacing:0;font-size:12px}
+
+.featured{display:grid;grid-template-columns:1.04fr .96fr;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:.35s var(--ease);box-shadow:var(--shadow-sm)}
+.featured:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:rgba(194,87,30,.25)}
+.featured-art{position:relative;min-height:340px;overflow:hidden}
+.featured-art > div{position:absolute;inset:0;transition:transform 1.2s var(--ease)}
+.featured:hover .featured-art > div{transform:scale(1.05)}
+.featured-body{padding:52px;display:flex;flex-direction:column;justify-content:center}
+.featured-body h3{font-size:clamp(2rem,3.6vw,3rem);margin:14px 0 16px}
+.featured-body p{color:var(--muted);font-size:15.5px;line-height:1.8;margin:0 0 28px;max-width:42ch}
+
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.chip{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;border:1px solid var(--line-2);padding:6px 13px;border-radius:100px;background:var(--panel)}
+html[lang="ar"] .chip{font-size:11.5px;letter-spacing:0;font-weight:500}
+.chip.gold{color:var(--gold);border-color:rgba(194,87,30,.3);background:var(--secondary-soft)}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid-1{display:grid;grid-template-columns:1fr;gap:22px}
+
+.gcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:.3s var(--ease);box-shadow:var(--shadow-sm)}
+.gcard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(194,87,30,.25)}
+.gcard-art{position:relative;aspect-ratio:4/3;overflow:hidden}
+.gcard-art > div{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.gcard:hover .gcard-art > div{transform:scale(1.05)}
+.gcard-status{position:absolute;top:14px;left:14px;z-index:3;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:6px 12px;border-radius:100px;color:var(--ink);background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line)}
+html[dir="rtl"] .gcard-status{left:auto;right:14px}
+html[lang="ar"] .gcard-status{font-size:11px;letter-spacing:0;font-weight:500}
+.gcard-status.dev{color:var(--gold);border-color:rgba(194,87,30,.3)}
+.gcard-body{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px}
+.gcard-body h3{font-size:21px;margin:0 0 3px;font-weight:600}
+.gcard-body p{margin:0;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+html[lang="ar"] .gcard-body p{letter-spacing:0;font-size:12.5px}
+.gcard-arrow{color:var(--muted-2);transition:.3s var(--ease);flex:0 0 auto;font-size:16px}
+.gcard:hover .gcard-arrow{color:var(--gold);transform:translateX(4px)}
+html[dir="rtl"] .gcard:hover .gcard-arrow{transform:translateX(-4px)}
+
+.tcard{cursor:pointer}
+.tcard-frame{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--panel);box-shadow:var(--shadow-sm);transition:.3s var(--ease)}
+.tcard:hover .tcard-frame{box-shadow:var(--shadow);border-color:rgba(194,87,30,.25)}
+.tcard-frame > div.bg{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.tcard:hover .tcard-frame > div.bg{transform:scale(1.04)}
+.play{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;z-index:3;transition:.3s var(--ease);background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:var(--shadow-sm)}
+.play::before{content:'';width:0;height:0;border-left:12px solid var(--ink);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px;transition:.3s}
+html[dir="rtl"] .play::before{margin-left:0;margin-right:4px;border-left:0;border-right:12px solid var(--ink)}
+.tcard:hover .play{background:var(--gold);border-color:var(--gold);transform:scale(1.06)}
+.tcard:hover .play::before{border-left-color:#fff;border-right-color:#fff}
+.tcard-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:14px}
+.tcard-meta h4{font-size:18px;font-weight:600;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcard-meta span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap;font-weight:500}
+html[lang="ar"] .tcard-meta span{letter-spacing:0}
+
+.nlist{display:flex;flex-direction:column}
+.nrow{display:grid;grid-template-columns:120px 1fr 30px;gap:28px;align-items:center;padding:26px 18px;border-bottom:1px solid var(--line);cursor:pointer;transition:.25s var(--ease);border-radius:var(--r);margin:0 -18px}
+.nrow:first-child{border-top:1px solid var(--line)}
+.nrow:hover{background:var(--panel);box-shadow:var(--shadow-sm)}
+.nrow time{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+html[lang="ar"] .nrow time{letter-spacing:0}
+.nrow h4{font-family:var(--serif);font-size:22px;font-weight:600;margin:0 0 4px;transition:color .25s;line-height:1.25}
+.nrow:hover h4{color:var(--gold)}
+.nrow p{margin:0;font-size:14px;color:var(--muted);max-width:68ch;line-height:1.65}
+.nrow .go{color:var(--muted-2);transition:.25s;justify-self:end}
+.nrow:hover .go{color:var(--gold);transform:translateX(3px)}
+html[dir="rtl"] .nrow:hover .go{transform:translateX(-3px)}
+
+.timeline{position:relative;padding-left:28px;border-left:1px solid var(--line)}
+html[dir="rtl"] .timeline{padding-left:0;padding-right:28px;border-left:0;border-right:1px solid var(--line)}
+.tl-item{position:relative;padding:0 0 34px 0}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-33.5px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--gold-dim)}
+html[dir="rtl"] .tl-item::before{left:auto;right:-33.5px}
+.tl-item time{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+html[lang="ar"] .tl-item time{letter-spacing:0}
+.tl-item h4{font-size:20px;font-weight:600;margin:8px 0 6px}
+.tl-item p{margin:0;font-size:14px;color:var(--muted);line-height:1.7}
+
+.tcard-person{text-align:center}
+.person-art{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:var(--r-lg);border:1px solid var(--line);margin-bottom:16px;transition:.3s var(--ease);box-shadow:var(--shadow-sm)}
+.tcard-person:hover .person-art{box-shadow:var(--shadow);border-color:rgba(194,87,30,.25)}
+.person-art > div{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.tcard-person:hover .person-art > div{transform:scale(1.04)}
+.tcard-person h4{font-size:20px;font-weight:600;margin:0 0 3px}
+.tcard-person .role{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+html[lang="ar"] .tcard-person .role{letter-spacing:0;font-size:12px}
+.tcard-person .bio{font-size:13.5px;color:var(--muted);margin:10px 0 0;line-height:1.65}
+
+.page-head{padding:170px 0 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(760px 400px at 14% 0%, rgba(232,114,47,.10), transparent 62%),
+    radial-gradient(640px 360px at 88% 40%, rgba(255,217,184,.5), transparent 68%);
+}
+.page-head h1{font-size:clamp(2.5rem,6vw,4.4rem);margin:16px 0 16px}
+.page-head p{color:var(--muted);max-width:58ch;margin:0;font-size:16px;line-height:1.8}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.filters button{background:var(--panel);border:1px solid var(--line-2);color:var(--muted);border-radius:100px;padding:9px 18px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:.25s var(--ease)}
+html[lang="ar"] .filters button{letter-spacing:0;font-size:12px}
+.filters button:hover{color:var(--ink);border-color:var(--gold)}
+.filters button.on{color:#fff;background:var(--gold);border-color:var(--gold)}
+
+.detail-hero{position:relative;min-height:64vh;display:flex;align-items:flex-end;overflow:hidden;padding:150px 0 64px;border-bottom:1px solid var(--line)}
+.detail-hero .bg{position:absolute;inset:0;z-index:-2;opacity:.9}
+.detail-hero::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(251,248,243,.5) 0%, rgba(251,248,243,.7) 45%, rgba(251,248,243,.97) 100%)}
+.detail-hero h1{font-size:clamp(2.5rem,7vw,5rem);margin:16px 0 16px}
+.detail-hero .lede{font-size:17px;color:var(--ink-2);max-width:58ch;line-height:1.8;margin:0 0 26px}
+.prose{max-width:68ch}
+.prose p{font-size:16px;line-height:1.9;color:var(--ink-2);margin:0 0 20px}
+html[lang="ar"] .prose p{line-height:2.05}
+.prose h3{font-size:26px;margin:40px 0 14px;color:var(--ink)}
+.feature-list{list-style:none;padding:0;margin:0;display:grid;border-top:1px solid var(--line)}
+.feature-list li{padding:18px 4px 18px 32px;border-bottom:1px solid var(--line);position:relative;font-size:15px;color:var(--ink-2)}
+html[dir="rtl"] .feature-list li{padding-left:4px;padding-right:32px}
+.feature-list li::before{content:'—';position:absolute;left:0;color:var(--gold);font-weight:600}
+html[dir="rtl"] .feature-list li::before{left:auto;right:0}
+.side-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--shadow-sm)}
+.side-panel dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:13px 18px;font-size:13.5px}
+.side-panel dt{color:var(--muted-2);letter-spacing:.12em;text-transform:uppercase;font-size:9.5px;padding-top:3px;font-weight:600}
+html[lang="ar"] .side-panel dt{letter-spacing:0;font-size:11px}
+.side-panel dd{margin:0;color:var(--ink);font-weight:500}
+.detail-grid{display:grid;grid-template-columns:1.6fr .9fr;gap:60px;align-items:start}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.gallery > div{aspect-ratio:16/10;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;position:relative}
+.gallery > div > div{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.gallery > div:hover > div{transform:scale(1.04)}
+
+.footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:80px 0 36px;background:var(--bg-2)}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:54px;margin-bottom:60px}
+.footer h5{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin:0 0 20px;font-weight:600}
+html[lang="ar"] .footer h5{letter-spacing:0;font-size:12px}
+.footer ul{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+.footer ul a{font-size:14px;color:var(--muted);transition:.25s}
+.footer ul a:hover{color:var(--gold)}
+.footer .brand-word{font-size:22px}
+.footer p.desc{color:var(--muted);font-size:14px;line-height:1.75;margin:16px 0 0;max-width:34ch}
+.news-form{display:flex;background:var(--panel);border:1px solid var(--line-2);border-radius:var(--r-sm);overflow:hidden;margin-top:6px}
+.news-form input{flex:1;background:none;border:0;padding:13px 15px;color:var(--ink);font-family:var(--sans);font-size:13.5px;outline:none;min-width:0}
+.news-form input::placeholder{color:var(--muted-2)}
+.news-form button{background:var(--gold);border:0;color:#fff;padding:0 20px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.25s;font-family:var(--sans);font-weight:600}
+.news-form button:hover{background:var(--gold-soft)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:28px;border-top:1px solid var(--line);font-size:11.5px;letter-spacing:.06em;color:var(--muted-2)}
+.socials{display:flex;gap:18px;flex-wrap:wrap}
+.socials a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:.25s;font-weight:500}
+.socials a:hover{color:var(--gold)}
+
+.modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:28px;opacity:0;transition:opacity .3s var(--ease)}
+.modal[hidden]{display:none}
+.modal.open{opacity:1}
+.modal-backdrop{position:absolute;inset:0;background:rgba(30,22,15,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.modal-box{position:relative;z-index:2;width:100%;max-width:600px;max-height:88vh;overflow:auto;background:var(--panel);border:1px solid var(--line-2);border-radius:var(--r-lg);transform:translateY(14px) scale(.99);transition:transform .35s var(--ease);box-shadow:0 50px 100px -30px rgba(50,30,10,.4)}
+.modal.open .modal-box{transform:none}
+.modal-box.wide{max-width:960px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:3}
+.modal-head h3{font-size:20px;font-weight:600;margin:0}
+.x{background:var(--panel-2);border:1px solid var(--line);color:var(--muted);width:34px;height:34px;border-radius:8px;cursor:pointer;transition:.25s;font-size:15px;line-height:1}
+.x:hover{color:var(--gold);border-color:var(--gold);background:var(--secondary-soft)}
+.modal-body{padding:24px}
+.video-frame{position:relative;aspect-ratio:16/9;background:var(--bg-2)}
+.video-frame iframe,.video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.slate{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;background:radial-gradient(circle at 50% 40%, rgba(232,114,47,.12), transparent 60%),linear-gradient(160deg, var(--secondary-soft), var(--bg-2))}
+.slate h3{font-size:clamp(1.5rem,4vw,2.3rem);margin:12px 0 8px}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,20px);z-index:300;background:var(--ink);color:var(--bg);border-radius:100px;padding:13px 24px;font-size:12.5px;letter-spacing:.03em;font-weight:500;opacity:0;pointer-events:none;transition:.35s var(--ease);box-shadow:0 20px 50px -18px rgba(40,25,10,.5)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+body.mode-admin{background:var(--bg)}
+body.mode-admin .nav,body.mode-admin #footer{display:none}
+
+.login-wrap{
+  min-height:100vh;display:grid;place-items:center;padding:28px;position:relative;z-index:3;
+  background:
+    radial-gradient(700px 420px at 50% 0%, rgba(232,114,47,.12), transparent 65%),
+    radial-gradient(600px 400px at 20% 100%, rgba(255,217,184,.5), transparent 65%);
+}
+.login-card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:42px 36px;box-shadow:var(--shadow-lg)}
+.login-card .display{margin-bottom:6px}
+.login-lock{
+  width:44px;height:44px;border-radius:12px;background:var(--secondary-soft);border:1px solid rgba(194,87,30,.22);
+  display:grid;place-items:center;color:var(--gold);font-size:18px;margin-bottom:18px;
+}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.sec-note{
+  font-size:11.5px;color:var(--muted-2);line-height:1.7;margin-top:18px;
+  padding:12px 14px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-sm);
+}
+
+.admin-shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh;position:relative;z-index:3}
+.side{position:sticky;top:0;height:100vh;background:var(--panel);border-right:1px solid var(--line);padding:24px 14px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+html[dir="rtl"] .side{border-right:0;border-left:1px solid var(--line)}
+.side-brand{display:flex;align-items:center;gap:11px;padding:0 10px 22px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.side-brand .brand-word{font-size:14px;letter-spacing:.2em}
+.side-brand .brand-mark{width:22px;height:22px;border-radius:5px}
+.side-brand .brand-mark::after{width:7px;height:7px;border-radius:1.5px}
+.side-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-2);padding:14px 12px 8px;font-weight:600}
+.side a.slink{display:flex;align-items:center;gap:11px;padding:10px 12px;font-size:12.5px;font-weight:500;color:var(--muted);border-radius:8px;transition:.2s var(--ease)}
+.side a.slink:hover{color:var(--ink);background:var(--panel-2)}
+.side a.slink.active{color:var(--gold);background:var(--secondary-soft);font-weight:600}
+.side a.slink .ico{width:16px;text-align:center;opacity:.85;font-size:12px}
+.side-foot{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);display:grid;gap:4px}
+
+.admin-main{padding:30px 40px 80px;max-width:1200px;width:100%}
+.adm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;flex-wrap:wrap}
+.adm-head h1{font-size:30px;font-weight:600}
+.adm-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.adm-topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;margin-bottom:28px;border-bottom:1px solid var(--line);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.adm-topbar .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:8px}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.panel-pad{padding:26px}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:15px 20px;border-bottom:1px solid var(--line);white-space:nowrap}
+html[dir="rtl"] .tbl th{text-align:right}
+.tbl td{padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:middle;color:var(--ink-2)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr{transition:background .2s}
+.tbl tbody tr:hover{background:var(--panel-2)}
+.tbl .t-title{color:var(--ink);font-weight:600;font-family:var(--serif);font-size:17px}
+.tbl .row-actions{display:flex;gap:6px;justify-content:flex-end}
+.icon-btn{background:var(--panel);border:1px solid var(--line);color:var(--muted);width:30px;height:30px;border-radius:7px;cursor:pointer;transition:.2s;font-size:12px;display:grid;place-items:center}
+.icon-btn:hover{color:var(--gold);border-color:var(--gold);background:var(--secondary-soft)}
+.icon-btn.del:hover{color:var(--danger);border-color:rgba(201,65,58,.4);background:rgba(201,65,58,.07)}
+.badge{font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:100px;border:1px solid var(--line-2);color:var(--muted);display:inline-block;white-space:nowrap;font-weight:600;background:var(--panel)}
+html[lang="ar"] .badge{letter-spacing:0}
+.badge.gold{color:var(--gold);border-color:rgba(194,87,30,.3);background:var(--secondary-soft)}
+.badge.green{color:var(--ok);border-color:rgba(63,154,99,.3);background:rgba(63,154,99,.07)}
+.badge.blue{color:#2f6f9e;border-color:rgba(47,111,158,.28);background:rgba(47,111,158,.07)}
+
+.fl{display:block;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin:0 0 8px;font-weight:600}
+html[lang="ar"] .fl{letter-spacing:0;font-size:11px}
+.inp,.sel,.txa{width:100%;background:var(--panel);border:1px solid var(--line-2);color:var(--ink);padding:11px 13px;font-family:var(--sans);font-size:14px;font-weight:400;outline:none;transition:.2s var(--ease);border-radius:var(--r-sm)}
+.inp:focus,.sel:focus,.txa:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,87,30,.12)}
+.txa{min-height:110px;resize:vertical;line-height:1.7}
+.sel{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%237d7064'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+html[dir="rtl"] .sel{background-position:left 13px center;padding-right:13px;padding-left:34px}
+.field{margin-bottom:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.form-grid .full{grid-column:1/-1}
+.check{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13.5px;color:var(--ink-2);padding:11px 0}
+.check input{appearance:none;width:17px;height:17px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel);cursor:pointer;position:relative;flex:0 0 auto;transition:.2s}
+.check input:checked{background:var(--gold);border-color:var(--gold)}
+.check input:checked::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700}
+.err{color:var(--danger);font-size:12.5px;min-height:18px;margin-top:8px}
+
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+.ov-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;transition:.25s var(--ease);box-shadow:var(--shadow-sm)}
+.ov-card:hover{border-color:rgba(194,87,30,.28);transform:translateY(-2px);box-shadow:var(--shadow)}
+.ov-card b{display:block;font-family:var(--serif);font-size:34px;font-weight:600;color:var(--gold);line-height:1}
+.ov-card span{display:block;margin-top:8px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.two-col{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+.list-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.list-row:last-child{border-bottom:0}
+.list-row .t{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-row .d{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
+
+.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.sec-tile{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.sec-tile .k{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);font-weight:600;margin-bottom:6px}
+.sec-tile .v{font-size:15px;color:var(--ink);font-weight:600;font-family:var(--serif)}
+.sec-tile .v.small{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink-2)}
+.warnbox{background:rgba(194,87,30,.06);border:1px solid rgba(194,87,30,.22);border-radius:var(--r);padding:14px 16px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
+
+@media(max-width:1100px){
+  .intro-grid{grid-template-columns:1fr;gap:44px}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .detail-grid{grid-template-columns:1fr;gap:40px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .two-col{grid-template-columns:1fr}
+  .ov-grid{grid-template-columns:repeat(2,1fr)}
+  .featured{grid-template-columns:1fr}
+  .featured-art{min-height:280px}
+  .featured-body{padding:36px}
+}
+@media(max-width:940px){
+  .nav-links{display:none}
+  .nav-cta .access-link{display:none}
+  .burger{display:block}
+  .nav{padding:16px 22px}
+  .nav.solid{padding:11px 22px}
+  .wrap,.admin-main,.hero-grid{padding-left:22px;padding-right:22px}
+  .section{padding:76px 0}
+  .grid-3,.grid-2{grid-template-columns:1fr 1fr}
+  .admin-shell{grid-template-columns:1fr}
+  .side{position:sticky;top:0;height:auto;flex-direction:row;overflow-x:auto;gap:4px;padding:12px;border-right:0;border-bottom:1px solid var(--line);align-items:center;z-index:50}
+  html[dir="rtl"] .side{border-left:0;border-bottom:1px solid var(--line)}
+  .side-brand,.side-label,.side-foot{display:none}
+  .side a.slink{white-space:nowrap;padding:8px 13px;border-radius:100px}
+  .side a.slink.active{background:var(--secondary-soft)}
+  .admin-main{padding-top:24px}
+  .form-grid{grid-template-columns:1fr}
+  .hero{padding-top:130px}
+  .sec-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-visual{max-width:440px;margin:0 auto;width:100%}
+  .hero-frame{aspect-ratio:4/5}
+}
+@media(max-width:680px){
+  .grid-3,.grid-2,.grid-4{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .ov-grid{grid-template-columns:1fr 1fr}
+  .nrow{grid-template-columns:1fr;gap:6px;padding:20px 14px;margin:0 -14px}
+  .nrow .go{display:none}
+  .footer-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr}
+  .page-head{padding:140px 0 50px}
+  .detail-hero{padding:130px 0 44px}
+  .modal{padding:12px}
+  .lang-toggle{padding:7px 11px;font-size:10px}
+  .featured-body{padding:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="brand" data-act="go" data-href="#/">
+    <div class="brand-mark"></div>
+    <div class="brand-word" id="brandWord">N7 STUDIO<small data-i18n="brand_sub">Interactive Studio</small></div>
+  </div>
+  <nav class="nav-links" id="navLinks"></nav>
+  <div class="nav-cta">
+    <button class="lang-toggle" data-act="toggle-lang" aria-label="Language / اللغة">
+      <span class="lang-opt" data-lang-opt="en">EN</span>
+      <span class="lang-sep">/</span>
+      <span class="lang-opt" data-lang-opt="ar">ع</span>
+    </button>
+    <a class="access-link" href="#/admin" data-i18n="nav_access">Studio Access</a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<main id="view"></main>
+<footer class="footer" id="footer"></footer>
+
+<div class="modal" id="modal" hidden></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================================
+   N7 STUDIO — SECURITY NOTE
+   ----------------------------------------------------------------------------
+   This is a static site: everything runs in the visitor's browser. That means
+   the measures below raise the bar significantly, but they cannot replace a
+   server. Real DDoS protection, real auth, and real rate limiting require a
+   backend or an edge provider (Cloudflare, Vercel, Netlify, Fastly...).
+   See the notes at the bottom of this file.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   0. CLICKJACKING GUARD
+   --------------------------------------------------------------------------- */
+(function frameBust() {
+  try {
+    if (window.top !== window.self) {
+      window.top.location = window.self.location.href;
+    }
+  } catch (e) {
+    document.documentElement.innerHTML = '';
+  }
+})();
+
+/* ---------------------------------------------------------------------------
+   1. UTILITIES
+   --------------------------------------------------------------------------- */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const uid = (p = 'id') => p + '_' + Math.random().toString(36).slice(2, 9);
+const hashStr = (s) => { let h = 2166136261; s = String(s); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return Math.abs(h); };
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const LS_LANG = 'n7.lang';
+
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return dt.toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+function sortByDateDesc(a, b) { return String(b.date || '').localeCompare(String(a.date || '')); }
+
+/* URL allow-listing — blocks javascript:, vbscript:, and other payload schemes */
+function safeUrl(raw, allow) {
+  const u = String(raw ?? '').trim();
+  if (!u) return '';
+  if (allow.includes('img') && /^data:image\/(png|jpe?g|gif|webp|avif|svg\+xml)[;,]/i.test(u)) return u;
+  if (/^https?:\/\//i.test(u)) return u;
+  if (/^\/[^/]/.test(u)) return u;
+  if (/^\.\//.test(u)) return u;
+  return '';
+}
+/* Hard length caps so a paste-bomb can't freeze the UI */
+function cap(str, max) {
+  const s = String(str ?? '');
+  return s.length > max ? s.slice(0, max) : s;
+}
+
+/* ---------------------------------------------------------------------------
+   2. CREDENTIAL VAULT
+   The password is never written as a literal. It is reconstructed at runtime
+   from two numeric fragments. Comparison is constant-time to avoid timing leaks.
+   If an admin sets a custom password, it is stored only as a salted SHA-256 hash.
+   --------------------------------------------------------------------------- */
+const VAULT = (() => {
+  const _a = [71, 42, 44, 92, 38, 47, 34, 40, 27, 46, 36, 43, 32];
+  const _b = [7, 13, 21, 5, 11, 3, 17, 9, 23, 5, 13, 7, 19];
+
+  function materialise() {
+    let out = '';
+    for (let i = 0; i < _a.length; i++) out += String.fromCharCode(_a[i] + _b[i]);
+    return out;
+  }
+  /* Compare without early exit */
+  function safeEqual(a, b) {
+    a = String(a); b = String(b);
+    let diff = a.length ^ b.length;
+    const n = Math.max(a.length, b.length);
+    for (let i = 0; i < n; i++) {
+      diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+    }
+    return diff === 0;
+  }
+  async function sha256(text) {
+    if (!(window.crypto && window.crypto.subtle)) return null;
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) { return null; }
+  }
+  function salt() {
+    if (window.crypto && crypto.getRandomValues) {
+      return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    return String(Date.now()) + Math.random().toString(36).slice(2);
+  }
+  async function verify(input) {
+    const s = db.settings;
+    if (s.passwordHash && s.passwordSalt) {
+      const h = await sha256(s.passwordSalt + '|' + input);
+      return h ? safeEqual(h, s.passwordHash) : false;
+    }
+    return safeEqual(input, materialise());
+  }
+  async function setPassword(plain) {
+    const sa = salt();
+    const h = await sha256(sa + '|' + plain);
+    if (!h) return false;
+    db.settings.passwordSalt = sa;
+    db.settings.passwordHash = h;
+    persist();
+    return true;
+  }
+  function restoreDefault() {
+    delete db.settings.passwordHash;
+    delete db.settings.passwordSalt;
+    persist();
+  }
+  function isDefault() { return !(db.settings.passwordHash && db.settings.passwordSalt); }
+  return { verify, setPassword, restoreDefault, isDefault, sha256, salt };
+})();
+
+/* ---------------------------------------------------------------------------
+   3. LOGIN THROTTLE
+   5 attempts, then escalating lockouts (5m → 10m → 20m → 40m → 1h cap).
+   --------------------------------------------------------------------------- */
+const THROTTLE_KEY = 'n7.throttle';
+const MAX_FREE_ATTEMPTS = 5;
+
+function readThrottle() {
+  try {
+    const raw = localStorage.getItem(THROTTLE_KEY);
+    const o = raw ? JSON.parse(raw) : null;
+    if (o && typeof o.n === 'number' && typeof o.until === 'number') return o;
+  } catch (e) {}
+  return { n: 0, until: 0 };
+}
+function writeThrottle(o) {
+  try { localStorage.setItem(THROTTLE_KEY, JSON.stringify(o)); } catch (e) {}
+}
+function lockRemaining() {
+  const o = readThrottle();
+  return Math.max(0, (o.until || 0) - Date.now());
+}
+function registerFailure() {
+  const o = readThrottle();
+  o.n = (o.n || 0) + 1;
+  if (o.n >= MAX_FREE_ATTEMPTS) {
+    const over = o.n - MAX_FREE_ATTEMPTS;
+    const minutes = Math.min(60, 5 * Math.pow(2, over));
+    o.until = Date.now() + minutes * 60 * 1000;
+  }
+  writeThrottle(o);
+  return o;
+}
+function clearThrottle() {
+  try { localStorage.removeItem(THROTTLE_KEY); } catch (e) {}
+}
+function attemptsLeft() {
+  const o = readThrottle();
+  return Math.max(0, MAX_FREE_ATTEMPTS - (o.n || 0));
+}
+
+/* ---------------------------------------------------------------------------
+   4. SESSIONS
+   8-hour hard expiry, 30-minute idle expiry, random token.
+   --------------------------------------------------------------------------- */
+const SESSION_KEY = 'n7.session';
+const SESSION_TTL = 8 * 60 * 60 * 1000;
+const IDLE_TTL = 30 * 60 * 1000;
+
+function newToken() {
+  if (window.crypto && crypto.getRandomValues) {
+    return Array.from(crypto.getRandomValues(new Uint8Array(24)))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  return String(Date.now()) + Math.random().toString(36).slice(2);
+}
+function openSession() {
+  const now = Date.now();
+  const payload = { t: newToken(), at: now, seen: now, exp: now + SESSION_TTL };
+  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch (e) {}
+}
+function readSession() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s || typeof s.exp !== 'number') return null;
+    return s;
+  } catch (e) { return null; }
+}
+function touchSession() {
+  const s = readSession();
+  if (!s) return;
+  s.seen = Date.now();
+  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch (e) {}
+}
+function closeSession() {
+  try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+}
+function isAuthed() {
+  const s = readSession();
+  if (!s) return false;
+  const now = Date.now();
+  if (now > s.exp) { closeSession(); return false; }
+  if (now - (s.seen || s.at) > IDLE_TTL) { closeSession(); return false; }
+  return true;
+}
+
+/* ---------------------------------------------------------------------------
+   5. DATA INTEGRITY
+   Stored payload is signed with a rolling checksum. If localStorage is edited
+   by hand, the mismatch is detected and the content is reset to the seed.
+   --------------------------------------------------------------------------- */
+const DB_KEY = 'n7.studio.v1';
+const DB_VERSION = 3;
+let db = null;
+let integrityWarning = false;
+
+function checksum(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+  }
+  return (h >>> 0).toString(16) + ':' + str.length.toString(16);
+}
+
+/* ---------------------------------------------------------------------------
+   6. I18N
+   --------------------------------------------------------------------------- */
+const I18N = {
+  en: {
+    brand_sub: 'Interactive Studio',
+    nav_home: 'Home', nav_games: 'Games', nav_news: 'News', nav_team: 'Team', nav_studio: 'Studio',
+    nav_access: 'Studio Access',
+    hero_eyebrow: 'Independent Game Studio · Est. {year}',
+    hero_explore: 'Explore Our Worlds',
+    hero_watch: 'Watch Trailer',
+    hero_scroll: 'Scroll',
+    hero_titles: 'Titles',
+    hero_people: 'People',
+    studio_eyebrow: 'The Studio',
+    studio_headline: 'A small team with an unreasonable amount of patience.',
+    studio_read: 'Read our story',
+    stat_years: 'Years Independent',
+    stat_titles: 'Titles Shipped',
+    stat_people: 'People',
+    stat_players: 'Players',
+    featured_eyebrow: 'Featured Project',
+    featured_headline: 'Now in development',
+    featured_view: 'View Project',
+    trailers_eyebrow: 'Watch',
+    trailers_headline: 'Latest trailers',
+    trailers_sub: 'Every reveal, launch and accolade — collected in one place.',
+    news_eyebrow: 'Announcements',
+    news_headline: 'From the studio',
+    news_all: 'All news',
+    upcoming_eyebrow: 'On the Horizon',
+    upcoming_headline: 'Upcoming projects',
+    upcoming_sub: 'What we are building next — announced, in development, and still under wraps.',
+    dev_eyebrow: 'Development Journey',
+    dev_headline: 'Notes from the workbench',
+    dev_text: 'We publish an honest devlog every few weeks — systems torn out and rebuilt, art that did not survive contact with the light, and the small decisions that make a world feel real.',
+    dev_read: 'Read all updates',
+    cta_eyebrow: 'Join the Journey',
+    cta_headline: 'Be the first to know when the veil lifts.',
+    cta_sub: 'Occasional letters about development, never more than once a month.',
+    cta_games: 'Explore the Games',
+    cta_team: 'Meet the Team',
+    games_eyebrow: 'Our Games',
+    games_h1: 'Worlds we have built',
+    games_sub: 'Four projects, one philosophy: make it feel real before you make it big. Browse everything we have shipped, everything we are building, and everything still under wraps.',
+    filter_all: 'All',
+    filter_released: 'Released',
+    filter_dev: 'In Development',
+    filter_upcoming: 'Upcoming',
+    no_titles: 'No titles in this category yet.',
+    detail_watch: 'Watch Trailer',
+    detail_all_games: 'All Games',
+    detail_features: 'Key Features',
+    detail_gallery: 'Gallery',
+    detail_details: 'Details',
+    detail_status: 'Status',
+    detail_genre: 'Genre',
+    detail_release: 'Release',
+    detail_platforms: 'Platforms',
+    detail_studio: 'Studio',
+    detail_related: 'Related News',
+    detail_media: 'Media',
+    detail_trailers: 'Trailers',
+    detail_tba: 'TBA',
+    news_eyebrow2: 'Journal',
+    news_h1: 'News & Development',
+    news_sub: 'Announcements, milestones and honest devlogs from the team building the worlds.',
+    devlog: 'Devlog',
+    devlog_h2: 'Development updates',
+    news_back: 'Back to all news',
+    news_none: 'No announcements yet.',
+    team_eyebrow: 'The Team',
+    team_h1: 'The people behind the worlds',
+    team_sub: 'Seventeen people across four countries, all pointed at the same horizon. These are the leads you will hear from most.',
+    about_eyebrow: 'The Studio',
+    about_how: 'How we work',
+    about_p1: 'We keep teams small and projects self-funded. No pitch decks, no publisher notes — just a group of people who would rather make one good thing slowly than three forgettable things quickly.',
+    about_p2: 'Every environment is painted by hand. Every sound in the game was recorded by someone on this team. If a system does not make the world feel more real, it does not ship.',
+    about_founded: 'Founded',
+    about_location: 'Location',
+    about_team: 'Team',
+    about_team_size: 'core members',
+    about_contact: 'Contact',
+    about_follow: 'Follow',
+    about_no_links: 'No links yet.',
+    footer_explore: 'Explore',
+    footer_connect: 'Connect',
+    footer_newsletter: 'Newsletter',
+    footer_newsletter_sub: 'Development letters, once a month.',
+    footer_placeholder: 'your@email.com',
+    footer_join: 'Join',
+    footer_rights: 'All rights reserved.',
+    footer_est: 'Est.',
+    footer_thanks: 'Thank you — you are on the list.',
+    notfound_h: 'Lost in the veil',
+    notfound_p: 'This page does not exist — or it has not been written yet.',
+    notfound_btn: 'Return Home',
+    trailer_official: 'Official Trailer',
+    trailer_soon: 'Trailer coming soon',
+    status_released: 'Released',
+    status_dev: 'In Development',
+    status_upcoming: 'Upcoming'
+  },
+  ar: {
+    brand_sub: 'استوديو تفاعلي',
+    nav_home: 'الرئيسية', nav_games: 'الألعاب', nav_news: 'الأخبار', nav_team: 'الفريق', nav_studio: 'الاستوديو',
+    nav_access: 'دخول الاستوديو',
+    hero_eyebrow: 'استوديو ألعاب مستقل · تأسس عام {year}',
+    hero_explore: 'استكشف عوالمنا',
+    hero_watch: 'شاهد الإعلان',
+    hero_scroll: 'مرر للأسفل',
+    hero_titles: 'ألعاب',
+    hero_people: 'أشخاص',
+    studio_eyebrow: 'الاستوديو',
+    studio_headline: 'فريق صغير بصبر لا حدود له.',
+    studio_read: 'اقرأ قصتنا',
+    stat_years: 'سنوات من الاستقلال',
+    stat_titles: 'ألعاب صدرت',
+    stat_people: 'أشخاص',
+    stat_players: 'لاعب',
+    featured_eyebrow: 'المشروع المميز',
+    featured_headline: 'قيد التطوير الآن',
+    featured_view: 'عرض المشروع',
+    trailers_eyebrow: 'شاهد',
+    trailers_headline: 'أحدث الإعلانات',
+    trailers_sub: 'كل إعلان وإطلاق وجائزة — مجموعة في مكان واحد.',
+    news_eyebrow: 'الإعلانات',
+    news_headline: 'من الاستوديو',
+    news_all: 'كل الأخبار',
+    upcoming_eyebrow: 'في الأفق',
+    upcoming_headline: 'مشاريع قادمة',
+    upcoming_sub: 'ما نبنيه بعد ذلك — معلن، قيد التطوير، وما زال قيد الكتمان.',
+    dev_eyebrow: 'رحلة التطوير',
+    dev_headline: 'ملاحظات من طاولة العمل',
+    dev_text: 'ننشر يوميات تطوير صادقة كل بضعة أسابيع — أنظمة نُزعت وأُعيد بناؤها، وفن لم يصمد أمام الضوء، وقرارات صغيرة تجعل العالم يبدو حقيقياً.',
+    dev_read: 'اقرأ كل التحديثات',
+    cta_eyebrow: 'انضم إلى الرحلة',
+    cta_headline: 'كن أول من يعلم حين يُرفع الحجاب.',
+    cta_sub: 'رسائل متفرقة عن التطوير، لا تزيد عن مرة في الشهر.',
+    cta_games: 'استكشف الألعاب',
+    cta_team: 'تعرّف على الفريق',
+    games_eyebrow: 'ألعابنا',
+    games_h1: 'عوالم بنيناها',
+    games_sub: 'أربعة مشاريع، فلسفة واحدة: اجعله حقيقياً قبل أن تجعله ضخماً. تصفح كل ما أصدرناه، وكل ما نبنيه، وكل ما لا يزال قيد الكتمان.',
+    filter_all: 'الكل',
+    filter_released: 'صدرت',
+    filter_dev: 'قيد التطوير',
+    filter_upcoming: 'قادمة',
+    no_titles: 'لا توجد ألعاب في هذه الفئة بعد.',
+    detail_watch: 'شاهد الإعلان',
+    detail_all_games: 'كل الألعاب',
+    detail_features: 'أبرز الميزات',
+    detail_gallery: 'معرض الصور',
+    detail_details: 'التفاصيل',
+    detail_status: 'الحالة',
+    detail_genre: 'النوع',
+    detail_release: 'الإصدار',
+    detail_platforms: 'المنصات',
+    detail_studio: 'الاستوديو',
+    detail_related: 'أخبار ذات صلة',
+    detail_media: 'الوسائط',
+    detail_trailers: 'الإعلانات',
+    detail_tba: 'يُعلن لاحقاً',
+    news_eyebrow2: 'المجلة',
+    news_h1: 'الأخبار والتطوير',
+    news_sub: 'إعلانات وإنجازات ويوميات تطوير صادقة من الفريق الذي يبني العوالم.',
+    devlog: 'يوميات التطوير',
+    devlog_h2: 'تحديثات التطوير',
+    news_back: 'العودة إلى كل الأخبار',
+    news_none: 'لا توجد إعلانات بعد.',
+    team_eyebrow: 'الفريق',
+    team_h1: 'الأشخاص وراء العوالم',
+    team_sub: 'سبعة عشر شخصاً في أربع دول، كلهم ينظرون إلى الأفق ذاته. هؤلاء هم القادة الذين ستسمع منهم أكثر.',
+    about_eyebrow: 'الاستوديو',
+    about_how: 'كيف نعمل',
+    about_p1: 'نبقي الفرق صغيرة والمشاريع ممولة ذاتياً. لا عروض تقديمية ولا ملاحظات ناشرين — فقط مجموعة أشخاص يفضلون صنع شيء واحد جيد ببطء على ثلاثة أشياء منسية بسرعة.',
+    about_p2: 'كل بيئة تُرسم باليد. كل صوت في اللعبة سجّله أحد من هذا الفريق. إذا لم يكن النظام سيجعل العالم يبدو أكثر واقعية، فهو لا يُشحن.',
+    about_founded: 'التأسيس',
+    about_location: 'الموقع',
+    about_team: 'الفريق',
+    about_team_size: 'أعضاء أساسيون',
+    about_contact: 'تواصل',
+    about_follow: 'تابعنا',
+    about_no_links: 'لا توجد روابط بعد.',
+    footer_explore: 'استكشف',
+    footer_connect: 'تواصل',
+    footer_newsletter: 'النشرة البريدية',
+    footer_newsletter_sub: 'رسائل التطوير، مرة في الشهر.',
+    footer_placeholder: 'بريدك@example.com',
+    footer_join: 'انضم',
+    footer_rights: 'جميع الحقوق محفوظة.',
+    footer_est: 'تأسس',
+    footer_thanks: 'شكراً — أنت على القائمة.',
+    notfound_h: 'ضائع في الحجاب',
+    notfound_p: 'هذه الصفحة غير موجودة — أو لم تُكتب بعد.',
+    notfound_btn: 'العودة للرئيسية',
+    trailer_official: 'الإعلان الرسمي',
+    trailer_soon: 'الإعلان قريباً',
+    status_released: 'صدرت',
+    status_dev: 'قيد التطوير',
+    status_upcoming: 'قادمة'
+  }
+};
+
+let lang = (localStorage.getItem(LS_LANG) === 'ar') ? 'ar' : 'en';
+const t = (k) => (I18N[lang] && I18N[lang][k] !== undefined) ? I18N[lang][k] : (I18N.en[k] || k);
+const displayStatus = (s) => {
+  if (lang !== 'ar') return s;
+  return ({ 'Released': I18N.ar.status_released, 'In Development': I18N.ar.status_dev, 'Upcoming': I18N.ar.status_upcoming }[s]) || s;
+};
+const loc = (obj, key) => (obj && obj[key + '_ar'] && lang === 'ar') ? obj[key + '_ar'] : (obj ? obj[key] : '');
+const arrow = () => lang === 'ar' ? '←' : '→';
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  localStorage.setItem(LS_LANG, lang);
+  $$('[data-lang-opt]').forEach(el => el.classList.toggle('on', el.dataset.langOpt === lang));
+  $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  const mmLangEn = $('#mmLangEn'), mmLangAr = $('#mmLangAr');
+  if (mmLangEn) mmLangEn.classList.toggle('on', lang === 'en');
+  if (mmLangAr) mmLangAr.classList.toggle('on', lang === 'ar');
+}
+function setLang(next) {
+  lang = next === 'ar' ? 'ar' : 'en';
+  applyLang();
+  route();
+}
+
+/* ---------------------------------------------------------------------------
+   7. ART
+   --------------------------------------------------------------------------- */
+const ART = [
+  ['#fff3e9', '#ffe0c2', '#e8722f'],
+  ['#fdf0e4', '#f8d5b0', '#c2571e'],
+  ['#fff6ee', '#ffddba', '#f2913f'],
+  ['#fdf2e7', '#f7cf9f', '#d2691e'],
+  ['#fff4e6', '#ffd9a8', '#e67e22'],
+  ['#fef1e4', '#f6c99a', '#cc5500'],
+  ['#fff5ea', '#ffd7b0', '#e8722f'],
+  ['#fdf0e2', '#f5c894', '#b84a1a']
+];
+function hexA(hex, a) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16), g = parseInt(h.substring(2, 4), 16), b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function artFor(seed) {
+  const p = ART[hashStr(seed) % ART.length];
+  return `radial-gradient(120% 95% at 22% 8%, ${hexA(p[2], .30)}, transparent 60%),
+          radial-gradient(100% 85% at 84% 86%, ${hexA(p[2], .16)}, transparent 62%),
+          linear-gradient(158deg, ${p[1]}, ${p[0]} 74%)`;
+}
+function bgDecl(item, overlay = true) {
+  const safeCover = item ? safeUrl(item.cover, ['img']) : '';
+  if (safeCover) {
+    const ov = overlay ? 'linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.6)),' : '';
+    return `background:${ov}url("${esc(safeCover)}") center/cover no-repeat;`;
+  }
+  return `background:${artFor((item && (item.title || item.name)) || 'n7studio')};`;
+}
+
+/* ---------------------------------------------------------------------------
+   8. SEED DATA
+   --------------------------------------------------------------------------- */
+const SEED = {
+  settings: {
+    studio: 'N7 STUDIO',
+    subtitle: 'Interactive Studio',
+    tagline: 'We build worlds that linger after the screen goes dark.',
+    tagline_ar: 'نبني عوالم تبقى معك بعد أن ينطفئ ضوء الشاشة.',
+    intro: 'N7 STUDIO is an independent studio of artists, engineers and storytellers working from a converted textile mill on the Atlantic coast. We make games that reward attention — slow-burning worlds with weight, weather and consequence.',
+    intro_ar: 'N7 STUDIO استوديو مستقل من فنانين ومهندسين وحكواتيين يعملون من مصنع نسيج قديم على ساحل المحيط الأطلسي. نصنع ألعاباً تكافئ الانتباه — عوالم بطيئة الاشتعال، لها ثقل وطقس وعواقب.',
+    about: 'Founded in 2016 by four friends who could not stop arguing about level design, N7 STUDIO has grown into a team of seventeen. We self-fund our projects, keep our teams small, and take as long as it takes to get the feel right.',
+    about_ar: 'تأسس N7 STUDIO عام 2016 على يد أربعة أصدقاء لم يتوقفوا عن الجدال حول تصميم المراحل، ونما اليوم ليصبح فريقاً من سبعة عشر شخصاً. نمول مشاريعنا بأنفسنا، ونبقي فرقنا صغيرة، ونأخذ من الوقت ما يكفي للوصول إلى الإحساس الصحيح.',
+    email: 'hello@n7studio.com',
+    location: 'Porto, Portugal',
+    founded: '2016',
+    socials: { x: 'https://x.com', youtube: 'https://youtube.com', discord: 'https://discord.com', bluesky: 'https://bsky.app' }
+    /* No password field. Credential lives in VAULT. */
+  },
+  games: [
+    { id: 'g_ashen', title: 'Ashen Veil', tagline: 'A dying kingdom. A veil that must not lift.', status: 'In Development', genre: 'Action RPG', platforms: ['PC', 'PlayStation 5', 'Xbox Series X|S'], release: '2026', featured: true, cover: '',
+      description: 'Ashen Veil is a hand-crafted action RPG set in a kingdom where the sun has not risen in forty years. Forge pacts with forgotten deities, carve your own path through a fractured world, and decide what is worth saving when the light finally returns.',
+      features: ['Weighty, deliberate combat built on timing, reach and consequence.','A world that remembers — every pact reshapes the kingdom around you.','Hand-painted environments and an original score recorded in Lisbon.','No quest markers, no filler. Every road leads somewhere.'] },
+    { id: 'g_dusk', title: 'The Long Dusk', tagline: 'Some conversations take a lifetime.', status: 'Released', genre: 'Narrative Adventure', platforms: ['PC', 'Nintendo Switch'], release: '2023', featured: false, cover: '',
+      description: 'A quiet, single-sitting story about a lighthouse keeper and the stranger who arrives the night the lamps go out. Told entirely through dialogue, weather and the things people choose not to say.',
+      features: ['A complete story told in one uninterrupted evening.','Branching conversations with no correct answers.','An original folk score performed live in-studio.','Over one million players worldwide.'] },
+    { id: 'g_tides', title: 'Hollow Tides', tagline: 'The water remembers what the town forgot.', status: 'Released', genre: 'Survival Horror', platforms: ['PC'], release: '2021', featured: false, cover: '',
+      description: 'A first-person survival horror game set in a flooded fishing village. Manage breath, light and pressure as you descend into a place that was never meant to be found.',
+      features: ['Pressure-based survival systems that reward patience.','A fully simulated tidal environment.','No jumpscares — only the slow certainty that something is below you.'] },
+    { id: 'g_signal', title: 'Signal from the Deep', tagline: 'It has been answering for a very long time.', status: 'Upcoming', genre: 'Sci-Fi Mystery', platforms: ['PC', 'PlayStation 5'], release: '2027', featured: false, cover: '',
+      description: 'A newly announced project. A listening station at the edge of the solar system picks up a transmission that predates humanity. You are the only one awake to hear it.',
+      features: ['Announced for 2027 — full reveal coming soon.','A slow-burn mystery built around listening, not shooting.','Developed in parallel with Ashen Veil.'] }
+  ],
+  trailers: [
+    { id: 't_reveal', title: 'Ashen Veil — Official Reveal Trailer', game: 'Ashen Veil', date: '2025-06-12', video: '', description: 'The first look at our upcoming action RPG.' },
+    { id: 't_launch', title: 'The Long Dusk — Launch Trailer', game: 'The Long Dusk', date: '2023-10-05', video: '', description: 'One night. One lighthouse. One conversation.' },
+    { id: 't_acc', title: 'Hollow Tides — Accolades Trailer', game: 'Hollow Tides', date: '2021-11-02', video: '', description: 'What the press said about the descent.' }
+  ],
+  news: [
+    { id: 'n_1', title: 'Ashen Veil revealed at Summer Showcase', date: '2025-06-12', category: 'Announcement', pinned: true, cover: '', excerpt: 'After three years of quiet work, we finally showed the world what we have been building.',
+      body: 'After three years of quiet work, we finally showed the world what we have been building.\n\nAshen Veil is our most ambitious project to date: a hand-crafted action RPG set in a kingdom that has not seen the sun in forty years. The reveal trailer is only a fragment — a single region, a single pact, a single choice.\n\nWe are not ready to announce a release date beyond 2026. We are ready to promise that we will not rush this. Thank you for the extraordinary response.' },
+    { id: 'n_2', title: 'The Long Dusk passes one million players', date: '2024-03-18', category: 'Milestone', pinned: false, cover: '', excerpt: 'A quiet game about a lighthouse found a million quiet evenings.',
+      body: 'A quiet game about a lighthouse found a million quiet evenings.\n\nWhen we released The Long Dusk, we expected a small, devoted audience. A million players later, we are still reading your letters.\n\nThank you for sitting with it.' },
+    { id: 'n_3', title: 'We are hiring: Senior Environment Artist', date: '2025-02-04', category: 'Studio', pinned: false, cover: '', excerpt: 'Come paint a kingdom that has forgotten the sun.',
+      body: 'We are looking for a Senior Environment Artist to join the Ashen Veil team in Porto (or remote across Europe).\n\nYou will own entire regions end to end — blockout, material work, lighting and final polish. We care more about atmosphere and intent than polygon counts.\n\nWrite to us with a portfolio and a short note about a game environment you love and why.' },
+    { id: 'n_4', title: 'A new studio space, and what comes next', date: '2023-09-01', category: 'Studio', pinned: false, cover: '', excerpt: 'We moved into the old textile mill on Rua das Flores.',
+      body: 'We moved into the old textile mill on Rua das Flores.\n\nSeventeen desks, one very loud espresso machine, and enough space for the whole team to sit in the same room again. Small things matter more than they should.' }
+  ],
+  updates: [
+    { id: 'u_1', title: 'Devlog #12 — Rebuilding the combat feel', date: '2025-07-20', version: '0.9.4', body: 'We tore out and rebuilt the entire hit-reaction system this month. Three weeks of work for a change you will feel in the first ten seconds.' },
+    { id: 'u_2', title: 'Devlog #11 — Painting the veil', date: '2025-05-28', version: '0.9.1', body: 'A look at the shader work behind the veil itself: layered depth, volumetric scattering, and why we kept it subtle.' },
+    { id: 'u_3', title: 'Devlog #10 — Sound design in a sunless world', date: '2025-04-09', version: '0.8.7', body: 'How we recorded wind in a decommissioned tunnel, and why silence is the most expensive sound in the game.' },
+    { id: 'u_4', title: 'Devlog #09 — Our approach to quest design', date: '2025-02-16', version: '0.8.2', body: 'No markers, no checklists. A breakdown of the spatial and dialogue tools we use to make discovery feel earned.' }
+  ],
+  team: [
+    { id: 'p_1', name: 'Mara Vance', role: 'Creative Director', bio: 'Founded N7 STUDIO after a decade in AAA. Believes the pause between two lines of dialogue is the real design space.', photo: '' },
+    { id: 'p_2', name: 'Ilya Petrov', role: 'Lead Engineer', bio: 'Builds the systems nobody sees and everybody feels. Currently obsessed with deterministic physics.', photo: '' },
+    { id: 'p_3', name: 'Noor Haddad', role: 'Art Director', bio: 'Paints with light and dust. Previously a matte painter for film; still thinks in establishing shots.', photo: '' },
+    { id: 'p_4', name: 'Jonas Berg', role: 'Audio Director', bio: 'Records wind for a living and has the microphone collection to prove it.', photo: '' },
+    { id: 'p_5', name: 'Ren Tanaka', role: 'Narrative Lead', bio: 'Writes about people who cannot say what they mean. Keeps a notebook of overheard conversations.', photo: '' },
+    { id: 'p_6', name: 'Sofia Almeida', role: 'Studio Producer', bio: 'The reason anything ships. Keeps seventeen people pointed at the same horizon.', photo: '' }
+  ]
+};
+
+/* ---------------------------------------------------------------------------
+   9. LOAD / SAVE
+   --------------------------------------------------------------------------- */
+function persist() {
+  try {
+    const json = JSON.stringify(db);
+    const payload = JSON.stringify({ v: DB_VERSION, d: json, s: checksum(json) });
+    localStorage.setItem(DB_KEY, payload);
+  } catch (e) {
+    /* Quota exceeded — keep running in memory */
+  }
+}
+
+function loadDB() {
+  let loaded = null;
+  try {
+    const raw = localStorage.getItem(DB_KEY);
+    if (raw) {
+      const outer = JSON.parse(raw);
+      if (outer && outer.v === DB_VERSION && typeof outer.d === 'string') {
+        if (checksum(outer.d) === outer.s) {
+          loaded = JSON.parse(outer.d);
+        } else {
+          integrityWarning = true;   /* tampered payload — discard */
+        }
+      } else if (outer && outer.settings && outer.games) {
+        loaded = outer;              /* legacy format */
+      }
+    }
+  } catch (e) {
+    integrityWarning = true;
+  }
+
+  const base = clone(SEED);
+  if (loaded) {
+    base.settings = Object.assign(base.settings, loaded.settings || {});
+    ['games', 'trailers', 'news', 'updates', 'team'].forEach(k => {
+      if (Array.isArray(loaded[k])) base[k] = loaded[k];
+    });
+  }
+
+  /* Purge any legacy plaintext credential */
+  delete base.settings.password;
+
+  db = base;
+  persist();
+}
+
+/* ---------------------------------------------------------------------------
+   10. TOAST / MODAL
+   --------------------------------------------------------------------------- */
+let toastTimer;
+function toast(msg) {
+  const el = $('#toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+let modalKeyHandler = null;
+function showModal(html) {
+  const m = $('#modal');
+  m.innerHTML = `<div class="modal-backdrop" data-close="1"></div>${html}`;
+  m.hidden = false;
+  requestAnimationFrame(() => m.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+  modalKeyHandler = (e) => { if (e.key === 'Escape') closeModal(); };
+  document.addEventListener('keydown', modalKeyHandler);
+  m.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+}
+function closeModal() {
+  const m = $('#modal');
+  m.classList.remove('open');
+  document.body.style.overflow = '';
+  if (modalKeyHandler) { document.removeEventListener('keydown', modalKeyHandler); modalKeyHandler = null; }
+  setTimeout(() => { m.hidden = true; m.innerHTML = ''; }, 340);
+}
+
+/* ---------------------------------------------------------------------------
+   11. ROUTER (with navigation flood guard)
+   --------------------------------------------------------------------------- */
+const view = $('#view');
+const footer = $('#footer');
+const navLinks = $('#navLinks');
+
+function navItems() {
+  return [
+    { label: t('nav_home'), href: '#/' },
+    { label: t('nav_games'), href: '#/games' },
+    { label: t('nav_news'), href: '#/news' },
+    { label: t('nav_team'), href: '#/team' },
+    { label: t('nav_studio'), href: '#/about' }
+  ];
+}
+
+let gameFilter = 'All';
+let lastRouteAt = 0;
+let routeBurst = 0;
+
+function route(force) {
+  /* Guard against scripted hash-spam loops */
+  const now = Date.now();
+  if (!force) {
+    if (now - lastRouteAt < 25) {
+      routeBurst++;
+      if (routeBurst > 12) return;   /* clearly a loop, drop it */
+    } else {
+      routeBurst = 0;
+    }
+    lastRouteAt = now;
+  }
+
+  const raw = location.hash.replace(/^#/, '') || '/';
+  const parts = raw.split('/').filter(Boolean);
+  closeMobileMenu();
+
+  if (parts[0] === 'admin') {
+    document.querySelector('meta[name="robots"]')?.remove();
+    const m = document.createElement('meta');
+    m.name = 'robots'; m.content = 'noindex, nofollow';
+    document.head.appendChild(m);
+    renderAdmin(parts.slice(1));
+  } else {
+    document.querySelector('meta[name="robots"]')?.remove();
+    renderPublic(parts);
+  }
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+function renderPublic(parts) {
+  document.body.classList.remove('mode-admin');
+  document.body.classList.add('mode-public');
+  $('#nav').style.display = '';
+  footer.style.display = '';
+
+  const items = navItems();
+  navLinks.innerHTML = items.map(i => {
+    const active = (i.href === '#/' && !parts.length) || (i.href !== '#/' && parts[0] && i.href.endsWith(parts[0]));
+    return `<a href="${i.href}" class="${active ? 'active' : ''}">${esc(i.label)}</a>`;
+  }).join('');
+
+  $('#mobileMenu').innerHTML = items.map(i => `<a href="${i.href}">${esc(i.label)}</a>`).join('') +
+    `<a href="#/admin" style="font-size:15px;letter-spacing:.14em;color:var(--muted);margin-top:14px;font-family:var(--sans);text-transform:uppercase;font-weight:500">${esc(t('nav_access'))}</a>
+     <div class="mobile-lang">
+       <button id="mmLangEn" data-act="set-lang" data-lang="en" class="${lang === 'en' ? 'on' : ''}">EN</button>
+       <button id="mmLangAr" data-act="set-lang" data-lang="ar" class="${lang === 'ar' ? 'on' : ''}">العربية</button>
+     </div>`;
+
+  $('#brandWord').innerHTML = `${esc(db.settings.studio)}<small data-i18n="brand_sub">${esc(t('brand_sub'))}</small>`;
+  document.title = `${db.settings.studio} — ${lang === 'ar' ? 'استوديو ألعاب مستقل' : 'Independent Game Studio'}`;
+
+  const page = parts[0] || 'home';
+  let html = '';
+  if (page === 'home') html = viewHome();
+  else if (page === 'games') html = parts[1] ? viewGameDetail(parts[1]) : viewGames();
+  else if (page === 'news') html = parts[1] ? viewNewsDetail(parts[1]) : viewNews();
+  else if (page === 'team') html = viewTeam();
+  else if (page === 'about') html = viewAbout();
+  else html = view404();
+
+  view.innerHTML = html;
+  footer.innerHTML = footerHTML();
+  applyLang();
+  afterRender();
+}
+
+/* ---------------------------------------------------------------------------
+   12. PUBLIC VIEWS
+   --------------------------------------------------------------------------- */
+function viewHome() {
+  const s = db.settings;
+  const featured = db.games.find(g => g.featured) || db.games[0];
+  const trailers = [...db.trailers].sort(sortByDateDesc).slice(0, 3);
+  const news = [...db.news].sort(sortByDateDesc).slice(0, 3);
+  const upcoming = db.games.filter(g => g.status !== 'Released');
+  const updates = [...db.updates].sort(sortByDateDesc).slice(0, 3);
+  const heroArt = featured ? bgDecl(featured, false) : `background:${artFor('n7studio')};`;
+
+  return `
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">${esc(t('hero_eyebrow')).replace('{year}', esc(s.founded))}</div>
+        <h1>${esc(s.studio)}</h1>
+        <p class="tagline">${esc(loc(s, 'tagline'))}</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#/games">${esc(t('hero_explore'))}</a>
+          <button class="btn" data-act="watch-trailer" data-id="${esc((trailers[0] || {}).id || '')}">
+            <span style="width:0;height:0;border-left:8px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;display:inline-block"></span>
+            ${esc(t('hero_watch'))}
+          </button>
+        </div>
+      </div>
+      ${featured ? `
+      <div class="hero-visual" data-act="go" data-href="#/games/${esc(featured.id)}">
+        <div class="hero-frame"><div style="${heroArt}"></div></div>
+        <div class="hero-caption">
+          <span class="chip gold">${esc(displayStatus(featured.status))}</span>
+          <span class="hero-caption-title">${esc(featured.title)}</span>
+          <span class="hero-caption-arrow">${arrow()}</span>
+        </div>
+      </div>` : ''}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="intro-grid">
+        <div class="intro-copy reveal">
+          <div class="eyebrow">${esc(t('studio_eyebrow'))}</div>
+          <h2 style="font-size:clamp(1.9rem,3.8vw,3rem);margin:16px 0 24px;max-width:16ch">${esc(t('studio_headline'))}</h2>
+          <p>${esc(loc(s, 'intro'))}</p>
+          <a class="btn ghost" href="#/about" style="margin-top:8px">${esc(t('studio_read'))} ${arrow()}</a>
+        </div>
+        <div class="reveal d2">
+          <div class="stats">
+            <div class="stat"><b>${new Date().getFullYear() - parseInt(s.founded || 2016)}</b><span>${esc(t('stat_years'))}</span></div>
+            <div class="stat"><b>${db.games.length}</b><span>${esc(t('stat_titles'))}</span></div>
+            <div class="stat"><b>${db.team.length}</b><span>${esc(t('stat_people'))}</span></div>
+            <div class="stat"><b>1.2M</b><span>${esc(t('stat_players'))}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  ${featured ? `
+  <section class="section tight">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">${esc(t('featured_eyebrow'))}</div>
+          <h2 style="margin-top:14px">${esc(t('featured_headline'))}</h2>
+        </div>
+      </div>
+      <div class="featured reveal d1" data-act="go" data-href="#/games/${esc(featured.id)}">
+        <div class="featured-art"><div style="${bgDecl(featured, false)}"></div></div>
+        <div class="featured-body">
+          <div class="chip-row">
+            <span class="chip gold">${esc(displayStatus(featured.status))}</span>
+            <span class="chip">${esc(featured.genre)}</span>
+            <span class="chip">${esc(featured.release)}</span>
+          </div>
+          <h3>${esc(featured.title)}</h3>
+          <p>${esc(featured.tagline || featured.description)}</p>
+          <span class="btn primary" style="align-self:flex-start">${esc(t('featured_view'))} ${arrow()}</span>
+        </div>
+      </div>
+    </div>
+  </section>` : ''}
+
+  ${trailers.length ? `
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">${esc(t('trailers_eyebrow'))}</div>
+          <h2 style="margin-top:14px">${esc(t('trailers_headline'))}</h2>
+        </div>
+        <p>${esc(t('trailers_sub'))}</p>
+      </div>
+      <div class="grid-3">
+        ${trailers.map((tr, i) => trailerCard(tr, 'reveal d' + Math.min(i + 1, 3))).join('')}
+      </div>
+    </div>
+  </section>` : ''}
+
+  ${news.length ? `
+  <section class="section tight">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">${esc(t('news_eyebrow'))}</div>
+          <h2 style="margin-top:14px">${esc(t('news_headline'))}</h2>
+        </div>
+        <a class="btn ghost" href="#/news">${esc(t('news_all'))} ${arrow()}</a>
+      </div>
+      <div class="nlist reveal d1">
+        ${news.map(n => newsRow(n)).join('')}
+      </div>
+    </div>
+  </section>` : ''}
+
+  ${upcoming.length ? `
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">${esc(t('upcoming_eyebrow'))}</div>
+          <h2 style="margin-top:14px">${esc(t('upcoming_headline'))}</h2>
+        </div>
+        <p>${esc(t('upcoming_sub'))}</p>
+      </div>
+      <div class="grid-${Math.min(upcoming.length, 3) === 1 ? '1' : (upcoming.length === 2 ? '2' : '3')}">
+        ${upcoming.map((g, i) => gameCard(g, 'reveal d' + Math.min(i + 1, 3))).join('')}
+      </div>
+    </div>
+  </section>` : ''}
+
+  ${updates.length ? `
+  <section class="section tight">
+    <div class="wrap">
+      <div class="intro-grid">
+        <div class="reveal">
+          <div class="eyebrow">${esc(t('dev_eyebrow'))}</div>
+          <h2 style="font-size:clamp(1.9rem,3.8vw,2.8rem);margin:16px 0 18px">${esc(t('dev_headline'))}</h2>
+          <p style="color:var(--muted);max-width:46ch;font-size:15px;line-height:1.8">${esc(t('dev_text'))}</p>
+          <a class="btn ghost" href="#/news" style="margin-top:14px">${esc(t('dev_read'))} ${arrow()}</a>
+        </div>
+        <div class="reveal d2">
+          <div class="timeline">
+            ${updates.map(u => `
+              <div class="tl-item">
+                <time>${esc(fmtDate(u.date))}${u.version ? ' · v' + esc(u.version) : ''}</time>
+                <h4>${esc(u.title)}</h4>
+                <p>${esc(u.body)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>` : ''}
+
+  <section class="section">
+    <div class="wrap" style="text-align:center">
+      <div class="reveal">
+        <div class="eyebrow">${esc(t('cta_eyebrow'))}</div>
+        <h2 style="font-size:clamp(2rem,4.6vw,3.4rem);margin:18px auto 16px;max-width:16ch">${esc(t('cta_headline'))}</h2>
+        <p style="color:var(--muted);max-width:46ch;margin:0 auto 30px">${esc(t('cta_sub'))}</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a class="btn primary" href="#/games">${esc(t('cta_games'))}</a>
+          <a class="btn" href="#/team">${esc(t('cta_team'))}</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function gameCard(g, cls = '') {
+  const statusCls = g.status === 'Released' ? '' : 'dev';
+  return `
+  <article class="gcard ${cls}" data-act="go" data-href="#/games/${esc(g.id)}">
+    <div class="gcard-art">
+      <div style="${bgDecl(g, false)}"></div>
+      <span class="gcard-status ${statusCls}">${esc(displayStatus(g.status))}</span>
+    </div>
+    <div class="gcard-body">
+      <div style="min-width:0">
+        <h3>${esc(g.title)}</h3>
+        <p>${esc(g.genre)}${g.release ? ' · ' + esc(g.release) : ''}</p>
+      </div>
+      <span class="gcard-arrow">${arrow()}</span>
+    </div>
+  </article>`;
+}
+function trailerCard(tr, cls = '') {
+  return `
+  <article class="tcard ${cls}" data-act="watch-trailer" data-id="${esc(tr.id)}">
+    <div class="tcard-frame">
+      <div class="bg" style="${bgDecl({ title: tr.game || tr.title }, false)}"></div>
+      <div class="play"></div>
+    </div>
+    <div class="tcard-meta">
+      <h4>${esc(tr.title)}</h4>
+      <span>${esc(fmtDate(tr.date))}</span>
+    </div>
+  </article>`;
+}
+function newsRow(n) {
+  return `
+  <div class="nrow" data-act="go" data-href="#/news/${esc(n.id)}">
+    <time>${esc(fmtDate(n.date))}</time>
+    <div>
+      <h4>${esc(n.title)}</h4>
+      <p>${esc(n.excerpt || '')}</p>
+    </div>
+    <span class="go">${arrow()}</span>
+  </div>`;
+}
+
+function viewGames() {
+  const filters = [
+    ['All', t('filter_all')],
+    ['Released', t('filter_released')],
+    ['In Development', t('filter_dev')],
+    ['Upcoming', t('filter_upcoming')]
+  ];
+  const list = db.games.filter(g => gameFilter === 'All' || g.status === gameFilter);
+  return `
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow reveal">${esc(t('games_eyebrow'))}</div>
+      <h1 class="reveal d1">${esc(t('games_h1'))}</h1>
+      <p class="reveal d2">${esc(t('games_sub'))}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="filters reveal">
+        ${filters.map(([val, label]) => `<button data-act="filter" data-filter="${esc(val)}" class="${gameFilter === val ? 'on' : ''}">${esc(label)}</button>`).join('')}
+      </div>
+      ${list.length ? `<div class="grid-3">${list.map((g, i) => gameCard(g, 'reveal d' + Math.min(i + 1, 3))).join('')}</div>`
+        : `<p class="muted">${esc(t('no_titles'))}</p>`}
+    </div>
+  </section>`;
+}
+
+function viewGameDetail(id) {
+  const g = db.games.find(x => x.id === id);
+  if (!g) return view404();
+  const relatedTrailers = db.trailers.filter(tr => tr.game === g.title);
+  const relatedNews = db.news.filter(n => (n.title + ' ' + n.body).toLowerCase().includes(g.title.toLowerCase().split(' ')[0]));
+  const gallery = [1, 2, 3, 4].map(i => ({ title: g.title + ' — still ' + i }));
+  const platforms = (g.platforms || []).join(', ') || t('detail_tba');
+  return `
+  <section class="detail-hero">
+    <div class="bg" style="${bgDecl(g, false)}"></div>
+    <div class="wrap">
+      <div class="chip-row reveal">
+        <span class="chip gold">${esc(displayStatus(g.status))}</span>
+        <span class="chip">${esc(g.genre)}</span>
+      </div>
+      <h1 class="reveal d1">${esc(g.title)}</h1>
+      <p class="lede reveal d2">${esc(g.tagline)}</p>
+      <div class="reveal d3" style="display:flex;gap:12px;flex-wrap:wrap">
+        ${relatedTrailers.length ? `<button class="btn primary" data-act="watch-trailer" data-id="${esc(relatedTrailers[0].id)}">${esc(t('detail_watch'))}</button>` : ''}
+        <a class="btn" href="#/games">${lang === 'ar' ? '→' : '←'} ${esc(t('detail_all_games'))}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="detail-grid">
+        <div>
+          <div class="prose reveal">
+            ${String(g.description || '').split(/\n+/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('')}
+          </div>
+          ${(g.features && g.features.length) ? `
+          <h3 class="reveal" style="font-size:26px;margin:48px 0 18px">${esc(t('detail_features'))}</h3>
+          <ul class="feature-list reveal d1">
+            ${g.features.map(f => `<li>${esc(f)}</li>`).join('')}
+          </ul>` : ''}
+
+          <h3 class="reveal" style="font-size:26px;margin:48px 0 18px">${esc(t('detail_gallery'))}</h3>
+          <div class="gallery reveal d1">
+            ${gallery.map(im => `<div><div style="${bgDecl(im, false)}"></div></div>`).join('')}
+          </div>
+        </div>
+        <aside class="reveal d2">
+          <div class="side-panel">
+            <h5 style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin:0 0 18px;font-weight:600">${esc(t('detail_details'))}</h5>
+            <dl>
+              <dt>${esc(t('detail_status'))}</dt><dd>${esc(displayStatus(g.status))}</dd>
+              <dt>${esc(t('detail_genre'))}</dt><dd>${esc(g.genre)}</dd>
+              <dt>${esc(t('detail_release'))}</dt><dd>${esc(g.release || t('detail_tba'))}</dd>
+              <dt>${esc(t('detail_platforms'))}</dt><dd>${esc(platforms)}</dd>
+              <dt>${esc(t('detail_studio'))}</dt><dd>${esc(db.settings.studio)}</dd>
+            </dl>
+          </div>
+          ${relatedNews.length ? `
+          <div class="side-panel" style="margin-top:18px">
+            <h5 style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin:0 0 14px;font-weight:600">${esc(t('detail_related'))}</h5>
+            ${relatedNews.slice(0, 3).map(n => `<div class="list-row" data-act="go" data-href="#/news/${esc(n.id)}" style="cursor:pointer"><span class="t">${esc(n.title)}</span><span class="d">${arrow()}</span></div>`).join('')}
+          </div>` : ''}
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  ${relatedTrailers.length ? `
+  <section class="section tight">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><div class="eyebrow">${esc(t('detail_media'))}</div><h2 style="margin-top:14px">${esc(t('detail_trailers'))}</h2></div></div>
+      <div class="grid-3">${relatedTrailers.map((tr, i) => trailerCard(tr, 'reveal d' + Math.min(i + 1, 3))).join('')}</div>
+    </div>
+  </section>` : ''}`;
+}
+
+function viewNews() {
+  const items = [...db.news].sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return sortByDateDesc(a, b);
+  });
+  const updates = [...db.updates].sort(sortByDateDesc);
+  return `
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow reveal">${esc(t('news_eyebrow2'))}</div>
+      <h1 class="reveal d1">${esc(t('news_h1'))}</h1>
+      <p class="reveal d2">${esc(t('news_sub'))}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      ${items.length ? `<div class="nlist reveal">${items.map(n => newsRow(n)).join('')}</div>` : `<p class="muted">${esc(t('news_none'))}</p>`}
+    </div>
+  </section>
+  ${updates.length ? `
+  <section class="section tight">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><div class="eyebrow">${esc(t('devlog'))}</div><h2 style="margin-top:14px">${esc(t('devlog_h2'))}</h2></div></div>
+      <div class="timeline reveal d1">
+        ${updates.map(u => `
+          <div class="tl-item">
+            <time>${esc(fmtDate(u.date))}${u.version ? ' · v' + esc(u.version) : ''}</time>
+            <h4>${esc(u.title)}</h4>
+            <p>${esc(u.body)}</p>
+          </div>`).join('')}
+      </div>
+    </div>
+  </section>` : ''}`;
+}
+
+function viewNewsDetail(id) {
+  const n = db.news.find(x => x.id === id);
+  if (!n) return view404();
+  return `
+  <section class="page-head" style="padding-bottom:44px">
+    <div class="wrap">
+      <div class="eyebrow reveal">${esc(n.category || '')} · ${esc(fmtDate(n.date))}</div>
+      <h1 class="reveal d1" style="max-width:18ch">${esc(n.title)}</h1>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="prose reveal" style="max-width:68ch">
+        ${String(n.body || n.excerpt || '').split(/\n+/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('')}
+      </div>
+      <div class="reveal d1" style="margin-top:48px;padding-top:28px;border-top:1px solid var(--line)">
+        <a class="btn ghost" href="#/news">${lang === 'ar' ? '→' : '←'} ${esc(t('news_back'))}</a>
+      </div>
+    </div>
+  </section>`;
+}
+
+function viewTeam() {
+  return `
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow reveal">${esc(t('team_eyebrow'))}</div>
+      <h1 class="reveal d1">${esc(t('team_h1'))}</h1>
+      <p class="reveal d2">${esc(t('team_sub'))}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="grid-3">
+        ${db.team.map((p, i) => {
+          const photo = safeUrl(p.photo, ['img']);
+          return `
+          <article class="tcard-person reveal d${Math.min((i % 3) + 1, 3)}">
+            <div class="person-art"><div style="${photo ? `background:url("${esc(photo)}") center/cover no-repeat;` : `background:${artFor(p.name)};`}"></div></div>
+            <h4>${esc(p.name)}</h4>
+            <div class="role">${esc(p.role)}</div>
+            <p class="bio">${esc(p.bio)}</p>
+          </article>`;
+        }).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+function viewAbout() {
+  const s = db.settings;
+  return `
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow reveal">${esc(t('about_eyebrow'))}</div>
+      <h1 class="reveal d1">${esc(s.studio)}</h1>
+      <p class="reveal d2">${esc(loc(s, 'tagline'))}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="intro-grid">
+        <div class="prose reveal">
+          ${String(loc(s, 'about') || '').split(/\n+/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('')}
+          <h3>${esc(t('about_how'))}</h3>
+          <p>${esc(t('about_p1'))}</p>
+          <p>${esc(t('about_p2'))}</p>
+        </div>
+        <div class="reveal d2">
+          <div class="side-panel">
+            <dl>
+              <dt>${esc(t('about_founded'))}</dt><dd>${esc(s.founded)}</dd>
+              <dt>${esc(t('about_location'))}</dt><dd>${esc(s.location)}</dd>
+              <dt>${esc(t('about_team'))}</dt><dd>${db.team.length} ${esc(t('about_team_size'))}</dd>
+              <dt>${esc(t('about_contact'))}</dt><dd><a href="mailto:${esc(s.email)}" style="color:var(--gold)">${esc(s.email)}</a></dd>
+            </dl>
+          </div>
+          <div class="side-panel" style="margin-top:18px">
+            <h5 style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin:0 0 14px;font-weight:600">${esc(t('about_follow'))}</h5>
+            <div class="socials" style="flex-direction:column;gap:12px">
+              ${Object.entries(s.socials || {}).filter(([, v]) => safeUrl(v, [])).map(([k, v]) => `<a href="${esc(safeUrl(v, []))}" target="_blank" rel="noopener noreferrer">${esc(k)} ${arrow()}</a>`).join('') || `<span class="muted tiny">${esc(t('about_no_links'))}</span>`}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function view404() {
+  return `
+  <section class="page-head" style="min-height:70vh;display:grid;place-items:center;text-align:center">
+    <div class="wrap">
+      <div class="eyebrow">404</div>
+      <h1 style="margin:16px 0">${esc(t('notfound_h'))}</h1>
+      <p style="margin:0 auto 30px">${esc(t('notfound_p'))}</p>
+      <a class="btn primary" href="#/">${esc(t('notfound_btn'))}</a>
+    </div>
+  </section>`;
+}
+
+function footerHTML() {
+  const s = db.settings;
+  const items = navItems();
+  return `
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="cursor:default">
+          <div class="brand-mark"></div>
+          <div class="brand-word">${esc(s.studio)}</div>
+        </div>
+        <p class="desc">${esc(loc(s, 'tagline'))}</p>
+      </div>
+      <div>
+        <h5>${esc(t('footer_explore'))}</h5>
+        <ul>${items.map(i => `<li><a href="${i.href}">${esc(i.label)}</a></li>`).join('')}</ul>
+      </div>
+      <div>
+        <h5>${esc(t('footer_connect'))}</h5>
+        <ul>
+          ${Object.entries(s.socials || {}).filter(([, v]) => safeUrl(v, [])).map(([k, v]) => `<li><a href="${esc(safeUrl(v, []))}" target="_blank" rel="noopener noreferrer">${esc(k)}</a></li>`).join('')}
+          <li><a href="mailto:${esc(s.email)}">${esc(s.email)}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>${esc(t('footer_newsletter'))}</h5>
+        <p class="desc" style="margin:0 0 14px;font-size:13px">${esc(t('footer_newsletter_sub'))}</p>
+        <form class="news-form" id="newsletterForm">
+          <input type="email" placeholder="${esc(t('footer_placeholder'))}" required aria-label="Email">
+          <button type="submit">${esc(t('footer_join'))}</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ${new Date().getFullYear()} ${esc(s.studio)}. ${esc(t('footer_rights'))}</span>
+      <span>${esc(s.location)} · ${esc(t('footer_est'))} ${esc(s.founded)}</span>
+      <a href="#/admin" style="color:var(--muted-2)">${esc(t('nav_access'))}</a>
+    </div>
+  </div>`;
+}
+
+/* ---------------------------------------------------------------------------
+   13. TRAILER PLAYER
+   --------------------------------------------------------------------------- */
+function embedUrl(url) {
+  const u = safeUrl(url, []);
+  if (!u) return null;
+  const yt = u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{6,})/);
+  if (yt) return { type: 'iframe', url: `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0` };
+  const vm = u.match(/vimeo\.com\/(\d+)/);
+  if (vm) return { type: 'iframe', url: `https://player.vimeo.com/video/${vm[1]}?autoplay=1` };
+  if (/\.(mp4|webm|ogg)(\?|$)/i.test(u)) return { type: 'video', url: u };
+  return { type: 'iframe', url: u };
+}
+function openTrailer(id) {
+  const tr = db.trailers.find(x => x.id === id);
+  if (!tr) { toast('Trailer not found'); return; }
+  const src = embedUrl(tr.video);
+  const body = src
+    ? (src.type === 'video'
+      ? `<video src="${esc(src.url)}" controls autoplay playsinline></video>`
+      : `<iframe src="${esc(src.url)}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`)
+    : `<div class="slate">
+         <div>
+           <div class="eyebrow">${esc(t('trailer_official'))}</div>
+           <h3>${esc(tr.title)}</h3>
+           <p class="muted" style="margin:0;font-size:13px">${esc(tr.description || t('trailer_soon'))}</p>
+         </div>
+       </div>`;
+  showModal(`
+    <div class="modal-box wide">
+      <div class="modal-head">
+        <h3>${esc(tr.title)}</h3>
+        <button class="x" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <div class="video-frame">${body}</div>
+      <div class="modal-body" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <span class="muted tiny">${esc(tr.game || '')}</span>
+        <span class="muted tiny">${esc(fmtDate(tr.date))}</span>
+      </div>
+    </div>`);
+}
+
+/* ---------------------------------------------------------------------------
+   14. ADMIN — LOGIN
+   --------------------------------------------------------------------------- */
+function renderAdmin(parts) {
+  document.body.classList.add('mode-admin');
+  document.body.classList.remove('mode-public');
+  $('#nav').style.display = 'none';
+  footer.style.display = 'none';
+  document.title = `Studio Dashboard — ${db.settings.studio}`;
+
+  if (!isAuthed()) {
+    view.innerHTML = loginView();
+    footer.innerHTML = '';
+    bindLogin();
+    return;
+  }
+
+  const section = parts[0] || 'overview';
+  const sess = readSession();
+  const sessionLeft = sess ? Math.max(0, sess.exp - Date.now()) : 0;
+
+  const shell = (inner) => `
+    <div class="admin-shell">
+      <aside class="side">
+        <div class="side-brand">
+          <div class="brand-mark"></div>
+          <div class="brand-word">${esc(db.settings.studio)}</div>
+        </div>
+        <div class="side-label">Manage</div>
+        ${[
+          ['overview', 'Overview', '◈'],
+          ['games', 'Games', '◆'],
+          ['trailers', 'Trailers', '▶'],
+          ['news', 'News', '✎'],
+          ['updates', 'Dev Updates', '⌁'],
+          ['team', 'Team', '◉'],
+          ['security', 'Security', '⛨'],
+          ['settings', 'Studio Settings', '⚙']
+        ].map(([k, label, ico]) => `
+          <a class="slink ${section === k ? 'active' : ''}" href="#/admin/${k}">
+            <span class="ico">${ico}</span><span>${label}</span>
+          </a>`).join('')}
+        <div class="side-foot">
+          <a class="slink" href="#/" target="_self"><span class="ico">↗</span><span>View Site</span></a>
+          <a class="slink" href="#" data-act="logout"><span class="ico">⏻</span><span>Sign Out</span></a>
+        </div>
+      </aside>
+      <main class="admin-main">
+        <div class="adm-topbar">
+          <span><span class="dot"></span>Secure session · expires in ${Math.floor(sessionLeft / 3600000)}h ${Math.floor((sessionLeft % 3600000) / 60000)}m</span>
+          <span>${esc(fmtDate(new Date().toISOString()))}</span>
+        </div>
+        ${inner}
+      </main>
+    </div>`;
+
+  let inner = '';
+  if (section === 'overview') inner = adminOverview();
+  else if (section === 'settings') inner = adminSettings();
+  else if (section === 'security') inner = adminSecurity();
+  else if (SCHEMAS[section]) inner = adminEntityList(section);
+  else inner = adminOverview();
+
+  view.innerHTML = shell(inner);
+  footer.innerHTML = '';
+  if (section === 'settings') bindSettingsForm();
+  if (section === 'security') bindSecurityPanel();
+}
+
+function loginView() {
+  const ms = lockRemaining();
+  const locked = ms > 0;
+  const mins = Math.ceil(ms / 60000);
+  const left = attemptsLeft();
+
+  return `
+  <div class="login-wrap">
+    <form class="login-card" id="loginForm" autocomplete="off" novalidate>
+      <div class="login-lock">⛨</div>
+      <div class="eyebrow">Restricted Area</div>
+      <h1 class="display" style="font-size:2.3rem;margin:14px 0 6px">Studio Dashboard</h1>
+      <p class="muted" style="margin:0 0 26px;font-size:13.5px">Authorized team members only. All access attempts are logged.</p>
+
+      <div class="field">
+        <label class="fl" for="pw">Password</label>
+        <input class="inp" type="password" id="pw" placeholder="••••••••••••" autocomplete="current-password"
+          ${locked ? 'disabled' : ''} maxlength="128">
+      </div>
+
+      <!-- Honeypot: invisible to humans, irresistible to bots -->
+      <div class="hp" aria-hidden="true">
+        <label>Leave this empty
+          <input type="text" id="hp_field" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+
+      <div class="err" id="loginErr">${locked ? `Locked out. Try again in about ${mins} minute${mins === 1 ? '' : 's'}.` : ''}</div>
+
+      <button class="btn primary" type="submit" style="width:100%;margin-top:4px" ${locked ? 'disabled' : ''}>
+        ${locked ? 'Locked' : 'Enter Studio'}
+      </button>
+
+      ${!locked && left < MAX_FREE_ATTEMPTS ? `<p class="err" style="text-align:center;margin-top:10px">${left} attempt${left === 1 ? '' : 's'} remaining before lockout.</p>` : ''}
+
+      <div class="sec-note">
+        This dashboard is protected by attempt throttling, session expiry and integrity checks.
+        If you are not authorized, close this page.
+      </div>
+
+      <p style="text-align:center;margin:16px 0 0"><a href="#/" style="color:var(--muted-2);font-size:12px">← Back to the site</a></p>
+    </form>
+  </div>`;
+}
+
+function bindLogin() {
+  const form = $('#loginForm');
+  if (!form) return;
+
+  const locked = lockRemaining() > 0;
+  if (locked) {
+    setTimeout(route, 20000);  /* re-render when the lock window may have passed */
+    return;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (lockRemaining() > 0) return;
+
+    const errEl = $('#loginErr');
+    const btn = form.querySelector('button[type="submit"]');
+    const input = $('#pw');
+    const honey = $('#hp_field');
+
+    /* Bot trap */
+    if (honey && honey.value.trim() !== '') {
+      registerFailure(); registerFailure(); registerFailure();
+      errEl.textContent = 'Access denied.';
+      return;
+    }
+
+    const value = input.value;
+    if (!value) { errEl.textContent = 'Enter your password.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+    errEl.textContent = '';
+
+    /* Small fixed delay — costs a human nothing, costs a script a lot */
+    await new Promise(r => setTimeout(r, 450));
+
+    const ok = await VAULT.verify(value);
+
+    if (ok) {
+      clearThrottle();
+      openSession();
+      input.value = '';
+      toast('Welcome back');
+      route(true);
+    } else {
+      const state = registerFailure();
+      const remaining = lockRemaining();
+
+      if (remaining > 0) {
+        input.value = '';
+        input.disabled = true;
+        btn.disabled = true;
+        btn.textContent = 'Locked';
+        const mins = Math.ceil(remaining / 60000);
+        errEl.textContent = `Too many attempts. Locked for about ${mins} minute${mins === 1 ? '' : 's'}.`;
+        setTimeout(route, remaining + 500);
+      } else {
+        const left = MAX_FREE_ATTEMPTS - (state.n || 0);
+        input.value = '';
+        input.focus();
+        btn.disabled = false;
+        btn.textContent = 'Enter Studio';
+        errEl.textContent = `Incorrect password. ${left} attempt${left === 1 ? '' : 's'} remaining.`;
+      }
+    }
+  });
+
+  setTimeout(() => { const p = $('#pw'); if (p && !p.disabled) p.focus(); }, 150);
+}
+
+/* ---------------------------------------------------------------------------
+   15. ADMIN — SCHEMAS
+   --------------------------------------------------------------------------- */
+const SCHEMAS = {
+  games: {
+    title: 'Games', singular: 'Game',
+    fields: [
+      { k: 'title', l: 'Title', t: 'text', req: true, max: 80 },
+      { k: 'tagline', l: 'Tagline', t: 'text', max: 160 },
+      { k: 'status', l: 'Status', t: 'select', o: ['Released', 'In Development', 'Upcoming'] },
+      { k: 'genre', l: 'Genre', t: 'text', max: 60 },
+      { k: 'release', l: 'Release window', t: 'text', max: 30 },
+      { k: 'platforms', l: 'Platforms (comma separated)', t: 'list' },
+      { k: 'cover', l: 'Cover image URL (https:// or blank for generated art)', t: 'text', full: true, url: 'img' },
+      { k: 'featured', l: 'Feature on homepage', t: 'bool', full: true },
+      { k: 'description', l: 'Description', t: 'textarea', full: true, max: 3000 },
+      { k: 'features', l: 'Key features (one per line)', t: 'lines', full: true }
+    ],
+    cols: [
+      { k: 'title', l: 'Title', cls: 't-title' },
+      { k: 'status', l: 'Status', badge: true },
+      { k: 'genre', l: 'Genre' },
+      { k: 'release', l: 'Release' }
+    ]
+  },
+  trailers: {
+    title: 'Trailers', singular: 'Trailer',
+    fields: [
+      { k: 'title', l: 'Title', t: 'text', req: true, max: 120 },
+      { k: 'game', l: 'Associated game', t: 'text', max: 80 },
+      { k: 'date', l: 'Date', t: 'date' },
+      { k: 'video', l: 'Video URL (YouTube / Vimeo / .mp4 — blank shows a slate)', t: 'text', full: true, url: '' },
+      { k: 'description', l: 'Description', t: 'textarea', full: true, max: 600 }
+    ],
+    cols: [
+      { k: 'title', l: 'Title', cls: 't-title' },
+      { k: 'game', l: 'Game' },
+      { k: 'date', l: 'Date', fmt: 'date' }
+    ]
+  },
+  news: {
+    title: 'News', singular: 'Article',
+    fields: [
+      { k: 'title', l: 'Title', t: 'text', req: true, max: 140 },
+      { k: 'date', l: 'Date', t: 'date' },
+      { k: 'category', l: 'Category', t: 'text', max: 40 },
+      { k: 'pinned', l: 'Pin to top', t: 'bool' },
+      { k: 'cover', l: 'Cover image URL', t: 'text', full: true, url: 'img' },
+      { k: 'excerpt', l: 'Excerpt', t: 'textarea', full: true, max: 400 },
+      { k: 'body', l: 'Body (blank line between paragraphs)', t: 'textarea', full: true, max: 12000 }
+    ],
+    cols: [
+      { k: 'title', l: 'Title', cls: 't-title' },
+      { k: 'category', l: 'Category', badge: true },
+      { k: 'date', l: 'Date', fmt: 'date' }
+    ]
+  },
+  updates: {
+    title: 'Dev Updates', singular: 'Update',
+    fields: [
+      { k: 'title', l: 'Title', t: 'text', req: true, max: 140 },
+      { k: 'date', l: 'Date', t: 'date' },
+      { k: 'version', l: 'Version', t: 'text', max: 20 },
+      { k: 'body', l: 'Body', t: 'textarea', full: true, max: 4000 }
+    ],
+    cols: [
+      { k: 'title', l: 'Title', cls: 't-title' },
+      { k: 'version', l: 'Version' },
+      { k: 'date', l: 'Date', fmt: 'date' }
+    ]
+  },
+  team: {
+    title: 'Team', singular: 'Team Member',
+    fields: [
+      { k: 'name', l: 'Name', t: 'text', req: true, max: 80 },
+      { k: 'role', l: 'Role', t: 'text', max: 60 },
+      { k: 'photo', l: 'Photo URL (blank for generated portrait)', t: 'text', full: true, url: 'img' },
+      { k: 'bio', l: 'Short bio', t: 'textarea', full: true, max: 500 }
+    ],
+    cols: [
+      { k: 'name', l: 'Name', cls: 't-title' },
+      { k: 'role', l: 'Role', badge: true }
+    ]
+  }
+};
+
+/* ---------------------------------------------------------------------------
+   16. ADMIN — VIEWS
+   --------------------------------------------------------------------------- */
+function adminOverview() {
+  const recentNews = [...db.news].sort(sortByDateDesc).slice(0, 4);
+  const recentUpdates = [...db.updates].sort(sortByDateDesc).slice(0, 4);
+  const featured = db.games.find(g => g.featured);
+  return `
+  <div class="adm-head">
+    <div>
+      <h1>Overview</h1>
+      <p>Everything currently published on ${esc(db.settings.studio)}.</p>
+    </div>
+    <a class="btn primary" href="#/" target="_self">View Live Site ↗</a>
+  </div>
+
+  <div class="ov-grid">
+    <div class="ov-card"><b>${db.games.length}</b><span>Games</span></div>
+    <div class="ov-card"><b>${db.trailers.length}</b><span>Trailers</span></div>
+    <div class="ov-card"><b>${db.news.length}</b><span>News Posts</span></div>
+    <div class="ov-card"><b>${db.updates.length}</b><span>Dev Updates</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel panel-pad">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <h3 style="font-size:18px;font-family:var(--sans);font-weight:600">Recent News</h3>
+        <a class="btn ghost sm" href="#/admin/news">Manage →</a>
+      </div>
+      ${recentNews.length ? recentNews.map(n => `
+        <div class="list-row"><span class="t">${esc(n.title)}</span><span class="d">${esc(fmtDate(n.date))}</span></div>`).join('') : '<p class="muted tiny">No posts yet.</p>'}
+    </div>
+
+    <div class="panel panel-pad">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <h3 style="font-size:18px;font-family:var(--sans);font-weight:600">Dev Updates</h3>
+        <a class="btn ghost sm" href="#/admin/updates">Manage →</a>
+      </div>
+      ${recentUpdates.length ? recentUpdates.map(u => `
+        <div class="list-row"><span class="t">${esc(u.title)}</span><span class="d">${esc(fmtDate(u.date))}</span></div>`).join('') : '<p class="muted tiny">No updates yet.</p>'}
+    </div>
+  </div>
+
+  <div class="panel panel-pad" style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <h3 style="font-size:18px;font-family:var(--sans);font-weight:600">Featured Game</h3>
+      <a class="btn ghost sm" href="#/admin/games">Manage →</a>
+    </div>
+    ${featured ? `<div class="list-row"><span class="t">${esc(featured.title)}</span><span class="badge gold">${esc(featured.status)}</span></div>`
+      : '<p class="muted tiny">No game is flagged as featured. Enable “Feature on homepage” in the Games editor.</p>'}
+  </div>`;
+}
+
+function badgeFor(val) {
+  const v = String(val || '').toLowerCase();
+  if (v.includes('released')) return 'green';
+  if (v.includes('development')) return 'gold';
+  if (v.includes('upcoming')) return 'blue';
+  return '';
+}
+
+function adminEntityList(key) {
+  const sc = SCHEMAS[key];
+  const items = [...(db[key] || [])];
+  return `
+  <div class="adm-head">
+    <div>
+      <h1>${esc(sc.title)}</h1>
+      <p>${items.length} ${items.length === 1 ? 'entry' : 'entries'} · changes publish instantly to the live site.</p>
+    </div>
+    <button class="btn primary" data-act="new-entity" data-key="${key}">+ New ${esc(sc.singular)}</button>
+  </div>
+
+  <div class="panel">
+    ${items.length ? `
+    <table class="tbl">
+      <thead><tr>
+        ${sc.cols.map(c => `<th>${esc(c.l)}</th>`).join('')}
+        <th style="text-align:right">Actions</th>
+      </tr></thead>
+      <tbody>
+        ${items.map(item => `
+          <tr>
+            ${sc.cols.map(c => {
+              let val = item[c.k];
+              if (c.fmt === 'date') val = fmtDate(val);
+              if (Array.isArray(val)) val = val.join(', ');
+              if (c.badge) return `<td><span class="badge ${badgeFor(val)}">${esc(val || '—')}</span></td>`;
+              return `<td class="${c.cls || ''}">${esc(val || '—')}</td>`;
+            }).join('')}
+            <td>
+              <div class="row-actions">
+                <button class="icon-btn" title="Edit" data-act="edit-entity" data-key="${key}" data-id="${esc(item.id)}">✎</button>
+                <button class="icon-btn del" title="Delete" data-act="del-entity" data-key="${key}" data-id="${esc(item.id)}">✕</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>` : `
+      <div style="padding:60px 26px;text-align:center">
+        <p class="muted" style="margin:0 0 18px">No ${esc(sc.title.toLowerCase())} yet.</p>
+        <button class="btn primary" data-act="new-entity" data-key="${key}">Create your first ${esc(sc.singular)}</button>
+      </div>`}
+  </div>`;
+}
+
+function adminSecurity() {
+  const th = readThrottle();
+  const sess = readSession();
+  const left = sess ? Math.max(0, sess.exp - Date.now()) : 0;
+  const idleLeft = sess ? Math.max(0, IDLE_TTL - (Date.now() - (sess.seen || sess.at))) : 0;
+  const hh = Math.floor(left / 3600000), mm = Math.floor((left % 3600000) / 60000);
+  const im = Math.floor(idleLeft / 60000);
+
+  return `
+  <div class="adm-head">
+    <div>
+      <h1>Security</h1>
+      <p>Session state, login throttling and credential management.</p>
+    </div>
+  </div>
+
+  <div class="sec-grid">
+    <div class="sec-tile">
+      <div class="k">Session Expires In</div>
+      <div class="v">${hh}h ${mm}m</div>
+    </div>
+    <div class="sec-tile">
+      <div class="k">Idle Timeout</div>
+      <div class="v">${im} min left</div>
+    </div>
+    <div class="sec-tile">
+      <div class="k">Failed Attempts Recorded</div>
+      <div class="v">${th.n || 0}</div>
+    </div>
+    <div class="sec-tile">
+      <div class="k">Credential Source</div>
+      <div class="v small">${VAULT.isDefault() ? 'Built-in studio key' : 'Custom (salted SHA-256)'}</div>
+    </div>
+  </div>
+
+  <div class="panel panel-pad" style="margin-bottom:18px">
+    <h3 style="font-size:18px;font-family:var(--sans);font-weight:600;margin-bottom:14px">Change Password</h3>
+    <p class="muted" style="font-size:13px;margin:0 0 18px">
+      New passwords are stored only as a salted SHA-256 hash. Leave both fields blank to keep the current password.
+    </p>
+    <form id="pwForm" style="max-width:480px">
+      <div class="field">
+        <label class="fl" for="pw-new">New password</label>
+        <input class="inp" type="password" id="pw-new" autocomplete="new-password" minlength="12" maxlength="128" placeholder="At least 12 characters">
+      </div>
+      <div class="field">
+        <label class="fl" for="pw-confirm">Confirm new password</label>
+        <input class="inp" type="password" id="pw-confirm" autocomplete="new-password" minlength="12" maxlength="128">
+      </div>
+      <div class="err" id="pwErr"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+        <button class="btn primary" type="submit">Update Password</button>
+        <button class="btn" type="button" data-act="restore-default-pw">Restore Built-in Key</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel panel-pad">
+    <h3 style="font-size:18px;font-family:var(--sans);font-weight:600;margin-bottom:14px">Login Throttle</h3>
+    <p class="muted" style="font-size:13px;margin:0 0 16px">
+      After ${MAX_FREE_ATTEMPTS} failed attempts the login is locked with escalating delays, up to 60 minutes.
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" data-act="clear-throttle">Clear Lockout &amp; Attempt Count</button>
+      <button class="btn" data-act="logout-all">End This Session</button>
+    </div>
+    <div class="warnbox" style="margin-top:18px">
+      <strong>Reality check:</strong> this dashboard runs entirely in the browser. Throttling, hashing and
+      session expiry make casual intrusion impractical, but a determined attacker who controls the client
+      can bypass any of it. For production, move authentication and rate limiting to a server or an
+      edge provider — see the notes at the bottom of the source file.
+    </div>
+  </div>`;
+}
+
+function bindSecurityPanel() {
+  const form = $('#pwForm');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const a = $('#pw-new').value;
+    const b = $('#pw-confirm').value;
+    const err = $('#pwErr');
+
+    if (!a && !b) { err.textContent = 'Nothing to change — both fields are empty.'; return; }
+    if (a.length < 12) { err.textContent = 'Use at least 12 characters.'; return; }
+    if (a !== b) { err.textContent = 'The two passwords do not match.'; return; }
+
+    const ok = await VAULT.setPassword(a);
+    if (!ok) { err.textContent = 'Could not hash the password in this browser. Try a modern one.'; return; }
+
+    form.reset();
+    err.textContent = '';
+    toast('Password updated');
+    route(true);
+  });
+}
+
+function adminSettings() {
+  const s = db.settings;
+  return `
+  <div class="adm-head">
+    <div>
+      <h1>Studio Settings</h1>
+      <p>Identity, contact details and bilingual content. Credentials live under <a href="#/admin/security" style="color:var(--gold)">Security</a>.</p>
+    </div>
+  </div>
+
+  <form id="settingsForm" class="panel panel-pad" style="max-width:880px">
+    <div class="form-grid">
+      <div class="field">
+        <label class="fl" for="set-studio">Studio name</label>
+        <input class="inp" id="set-studio" name="studio" value="${esc(s.studio)}" required maxlength="60">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-sub">Subtitle / descriptor</label>
+        <input class="inp" id="set-sub" name="subtitle" value="${esc(s.subtitle || '')}" maxlength="60">
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-tag">Tagline (hero) — English</label>
+        <input class="inp" id="set-tag" name="tagline" value="${esc(s.tagline)}" maxlength="180">
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-tag-ar">Tagline (hero) — العربية</label>
+        <input class="inp" id="set-tag-ar" name="tagline_ar" value="${esc(s.tagline_ar || '')}" dir="rtl" maxlength="180">
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-intro">Homepage introduction — English</label>
+        <textarea class="txa" id="set-intro" name="intro" maxlength="2000">${esc(s.intro)}</textarea>
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-intro-ar">Homepage introduction — العربية</label>
+        <textarea class="txa" id="set-intro-ar" name="intro_ar" dir="rtl" maxlength="2000">${esc(s.intro_ar || '')}</textarea>
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-about">About page text — English</label>
+        <textarea class="txa" id="set-about" name="about" style="min-height:150px" maxlength="4000">${esc(s.about)}</textarea>
+      </div>
+      <div class="field full">
+        <label class="fl" for="set-about-ar">About page text — العربية</label>
+        <textarea class="txa" id="set-about-ar" name="about_ar" dir="rtl" style="min-height:150px" maxlength="4000">${esc(s.about_ar || '')}</textarea>
+      </div>
+      <div class="field">
+        <label class="fl" for="set-email">Contact email</label>
+        <input class="inp" id="set-email" name="email" value="${esc(s.email)}" maxlength="120">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-loc">Location</label>
+        <input class="inp" id="set-loc" name="location" value="${esc(s.location)}" maxlength="80">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-founded">Founded</label>
+        <input class="inp" id="set-founded" name="founded" value="${esc(s.founded)}" maxlength="10">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-x">X / Twitter URL</label>
+        <input class="inp" id="set-x" name="social_x" value="${esc((s.socials || {}).x || '')}" maxlength="200">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-yt">YouTube URL</label>
+        <input class="inp" id="set-yt" name="social_youtube" value="${esc((s.socials || {}).youtube || '')}" maxlength="200">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-dc">Discord URL</label>
+        <input class="inp" id="set-dc" name="social_discord" value="${esc((s.socials || {}).discord || '')}" maxlength="200">
+      </div>
+      <div class="field">
+        <label class="fl" for="set-bs">Bluesky URL</label>
+        <input class="inp" id="set-bs" name="social_bluesky" value="${esc((s.socials || {}).bluesky || '')}" maxlength="200">
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:12px">
+      <button class="btn primary" type="submit">Save Changes</button>
+      <a class="btn" href="#/" target="_self">Preview Site</a>
+    </div>
+  </form>`;
+}
+
+function bindSettingsForm() {
+  const form = $('#settingsForm');
+  if (!form) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    db.settings.studio = cap(fd.get('studio'), 60).trim() || 'Studio';
+    db.settings.subtitle = cap(fd.get('subtitle'), 60).trim();
+    db.settings.tagline = cap(fd.get('tagline'), 180).trim();
+    db.settings.tagline_ar = cap(fd.get('tagline_ar'), 180).trim();
+    db.settings.intro = cap(fd.get('intro'), 2000).trim();
+    db.settings.intro_ar = cap(fd.get('intro_ar'), 2000).trim();
+    db.settings.about = cap(fd.get('about'), 4000).trim();
+    db.settings.about_ar = cap(fd.get('about_ar'), 4000).trim();
+    db.settings.email = cap(fd.get('email'), 120).trim();
+    db.settings.location = cap(fd.get('location'), 80).trim();
+    db.settings.founded = cap(fd.get('founded'), 10).trim();
+    db.settings.socials = {
+      x: safeUrl(fd.get('social_x'), []),
+      youtube: safeUrl(fd.get('social_youtube'), []),
+      discord: safeUrl(fd.get('social_discord'), []),
+      bluesky: safeUrl(fd.get('social_bluesky'), [])
+    };
+    persist();
+    toast('Settings saved');
+    route(true);
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   17. ADMIN — ENTITY EDITOR
+   --------------------------------------------------------------------------- */
+function openEditor(key, id) {
+  const sc = SCHEMAS[key];
+  const isNew = !id;
+  const existing = isNew ? {} : (db[key] || []).find(x => x.id === id);
+  if (!isNew && !existing) { toast('Entry not found'); return; }
+  const values = existing || {};
+
+  const fieldHTML = (f) => {
+    const val = values[f.k];
+    const full = f.full ? ' full' : '';
+    if (f.t === 'bool') {
+      return `<div class="field${full}"><label class="check"><input type="checkbox" data-f="${f.k}" ${val ? 'checked' : ''}> ${esc(f.l)}</label></div>`;
+    }
+    if (f.t === 'textarea' || f.t === 'lines') {
+      const v = f.t === 'lines' ? (Array.isArray(val) ? val.join('\n') : '') : (val || '');
+      return `<div class="field${full}"><label class="fl">${esc(f.l)}</label><textarea class="txa" data-f="${f.k}" ${f.max ? `maxlength="${f.max}"` : ''}>${esc(v)}</textarea></div>`;
+    }
+    if (f.t === 'select') {
+      return `<div class="field${full}"><label class="fl">${esc(f.l)}</label><select class="sel" data-f="${f.k}">
+        ${(f.o || []).map(o => `<option ${val === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div>`;
+    }
+    if (f.t === 'list') {
+      const v = Array.isArray(val) ? val.join(', ') : (val || '');
+      return `<div class="field${full}"><label class="fl">${esc(f.l)}</label><input class="inp" data-f="${f.k}" value="${esc(v)}" maxlength="300"></div>`;
+    }
+    return `<div class="field${full}"><label class="fl">${esc(f.l)}</label><input class="inp" type="${f.t === 'date' ? 'date' : 'text'}" data-f="${f.k}" value="${esc(val || '')}" ${f.max ? `maxlength="${f.max}"` : ''}></div>`;
+  };
+
+  showModal(`
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>${isNew ? 'New' : 'Edit'} ${esc(sc.singular)}</h3>
+        <button class="x" data-close="1" aria-label="Close">✕</button>
+      </div>
+      <form class="modal-body" id="entityForm">
+        <div class="form-grid">${sc.fields.map(fieldHTML).join('')}</div>
+        <div class="err" id="entityErr"></div>
+        <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:10px">
+          <button type="button" class="btn" data-close="1">Cancel</button>
+          <button type="submit" class="btn primary">${isNew ? 'Create' : 'Save'}</button>
+        </div>
+      </form>
+    </div>`);
+
+  const form = $('#entityForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const out = {};
+    let valid = true;
+    let urlProblem = false;
+
+    sc.fields.forEach(f => {
+      const el = form.querySelector(`[data-f="${f.k}"]`);
+      if (!el) return;
+
+      if (f.t === 'bool') {
+        out[f.k] = el.checked;
+      } else if (f.t === 'list') {
+        out[f.k] = el.value.split(',').map(s => cap(s, 60).trim()).filter(Boolean).slice(0, 12);
+      } else if (f.t === 'lines') {
+        out[f.k] = el.value.split('\n').map(s => cap(s, 300).trim()).filter(Boolean).slice(0, 20);
+      } else {
+        let v = el.value.trim();
+        if (f.max) v = cap(v, f.max);
+        if (f.url !== undefined) {
+          const cleaned = safeUrl(v, f.url === 'img' ? ['img'] : []);
+          if (v && !cleaned) { urlProblem = true; }
+          v = cleaned;
+        }
+        out[f.k] = v;
+      }
+      if (f.req && !out[f.k]) valid = false;
+    });
+
+    if (urlProblem) {
+      $('#entityErr').textContent = 'An image or video URL is not allowed. Use https:// links only.';
+      return;
+    }
+    if (!valid) {
+      $('#entityErr').textContent = 'Please fill in all required fields.';
+      return;
+    }
+
+    if (isNew) {
+      out.id = uid(key.substring(0, 2));
+      db[key] = db[key] || [];
+      db[key].unshift(out);
+      if (key === 'games' && out.featured) db.games.forEach(g => { if (g.id !== out.id) g.featured = false; });
+    } else {
+      const idx = db[key].findIndex(x => x.id === id);
+      db[key][idx] = Object.assign({}, db[key][idx], out);
+      if (key === 'games' && out.featured) db.games.forEach(g => { if (g.id !== id) g.featured = false; });
+    }
+    persist();
+    closeModal();
+    toast(isNew ? `${sc.singular} created` : `${sc.singular} updated`);
+    route(true);
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   18. ACTIONS
+   --------------------------------------------------------------------------- */
+function handleAction(act, el) {
+  const id = el.dataset.id;
+  const key = el.dataset.key;
+
+  switch (act) {
+    case 'go': location.hash = el.dataset.href; break;
+    case 'watch-trailer': if (id) openTrailer(id); else toast('No trailer available yet'); break;
+    case 'filter': gameFilter = el.dataset.filter; renderPublic(['games']); break;
+    case 'toggle-lang': setLang(lang === 'en' ? 'ar' : 'en'); break;
+    case 'set-lang': setLang(el.dataset.lang); break;
+
+    case 'logout':
+      closeSession();
+      toast('Signed out');
+      location.hash = '#/admin';
+      route(true);
+      break;
+
+    case 'logout-all':
+      closeSession();
+      toast('Session ended');
+      location.hash = '#/admin';
+      route(true);
+      break;
+
+    case 'clear-throttle':
+      clearThrottle();
+      toast('Lockout cleared');
+      route(true);
+      break;
+
+    case 'restore-default-pw':
+      if (confirm('Restore the built-in studio key? Any custom password will stop working.')) {
+        VAULT.restoreDefault();
+        toast('Built-in key restored');
+        route(true);
+      }
+      break;
+
+    case 'new-entity': openEditor(key, null); break;
+    case 'edit-entity': openEditor(key, id); break;
+
+    case 'del-entity': {
+      const sc = SCHEMAS[key];
+      const item = (db[key] || []).find(x => x.id === id);
+      if (!item) return;
+      const label = item.title || item.name || 'this entry';
+      if (confirm(`Delete “${label}”? This cannot be undone.`)) {
+        db[key] = db[key].filter(x => x.id !== id);
+        persist();
+        toast(`${sc.singular} deleted`);
+        route(true);
+      }
+      break;
+    }
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  e.preventDefault();
+  handleAction(el.dataset.act, el);
+});
+
+document.addEventListener('submit', (e) => {
+  if (e.target.id === 'newsletterForm') {
+    e.preventDefault();
+    const input = e.target.querySelector('input');
+    if (input && input.value) {
+      toast(t('footer_thanks'));
+      input.value = '';
+    }
+  }
+});
+
+/* ---------------------------------------------------------------------------
+   19. REVEALS / SCROLL / IDLE
+   --------------------------------------------------------------------------- */
+function afterRender() {
+  initReveals();
+  updateNavState();
+}
+let revealObserver = null;
+function initReveals() {
+  if (revealObserver) revealObserver.disconnect();
+  const els = $$('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('in')); return; }
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('in'); revealObserver.unobserve(en.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => revealObserver.observe(el));
+}
+function updateNavState() {
+  const nav = $('#nav');
+  if (!nav) return;
+  nav.classList.toggle('solid', window.scrollY > 30);
+}
+window.addEventListener('scroll', updateNavState, { passive: true });
+
+const burger = $('#burger');
+const mobileMenu = $('#mobileMenu');
+function closeMobileMenu() {
+  if (!burger) return;
+  burger.classList.remove('open');
+  burger.setAttribute('aria-expanded', 'false');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+burger.addEventListener('click', () => {
+  const open = !burger.classList.contains('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  mobileMenu.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') closeMobileMenu(); });
+
+/* Keep the session warm while the admin is genuinely being used */
+['click', 'keydown', 'mousemove', 'touchstart'].forEach(evt => {
+  document.addEventListener(evt, () => {
+    if (document.body.classList.contains('mode-admin') && isAuthed()) touchSession();
+  }, { passive: true });
+});
+
+/* Idle watchdog — drops an unattended admin session */
+setInterval(() => {
+  if (document.body.classList.contains('mode-admin')) {
+    if (sessionStorage.getItem(SESSION_KEY) && !isAuthed()) {
+      toast('Session expired — please sign in again');
+      route(true);
+    }
+  }
+}, 60000);
+
+/* ---------------------------------------------------------------------------
+   20. BOOT
+   --------------------------------------------------------------------------- */
+loadDB();
+applyLang();
+window.addEventListener('hashchange', route);
+route(true);
+
+if (integrityWarning) {
+  setTimeout(() => toast('Stored content failed its integrity check and was reset.'), 700);
+}
+</script>
+
+<!--
+============================================================================
+  SECURITY — WHAT IS (AND ISN'T) POSSIBLE HERE
+============================================================================
+
+WHAT THIS FILE DOES
+  • The password never appears as text in the source. It is reconstructed at
+    runtime from two numeric fragments, and compared in constant time.
+  • If you change the password in Security, only a salted SHA-256 hash is
+    stored — never the plaintext.
+  • Five wrong attempts trigger escalating lockouts: 5m → 10m → 20m → 40m → 1h.
+  • Sessions expire after 8 hours, and after 30 minutes of inactivity.
+  • Every content payload is signed with a checksum. Editing localStorage by
+    hand invalidates the signature and the site resets to its seed content.
+  • A Content-Security-Policy blocks external scripts, inline frames from
+    unknown hosts, plugins and base-tag hijacking.
+  • All user-supplied URLs are allow-listed (http/https, or data:image only
+    for images). javascript: and vbscript: are rejected everywhere.
+  • Every rendered value is HTML-escaped. A honeypot field catches naive bots.
+  • Clickjacking is blocked with a frame-buster plus frame-ancestors 'none'.
+  • All outbound links use rel="noopener noreferrer".
+
+WHAT THIS FILE CANNOT DO
+  • Stop a real DDoS. That is a network-layer attack against a host. A static
+    page has no host to flood until you deploy it somewhere — and then the
+    protection is the CDN's job, not the page's.
+  • Protect secrets. Anything shipped to the browser is ultimately readable by
+    the person running that browser. Client-side auth is a door lock, not a
+    vault. It stops colleagues and casual visitors, not a determined attacker
+    with devtools.
+  • Enforce rate limits that a scripted client respects. Local lockout is
+    stored in the browser — clearing storage clears the lockout.
+
+RECOMMENDED PRODUCTION SETUP
+  1. Put the site behind Cloudflare (free tier is enough to start):
+     • "Under Attack Mode" during an active flood
+     • Rate limiting rules on /admin and any API route
+     • WAF managed rules
+     • Bot Fight Mode
+  2. Move authentication to a serverless function (Cloudflare Workers,
+     Vercel Edge, Netlify Functions). Validate the password there, issue an
+     HttpOnly, Secure, SameSite=Strict session cookie.
+  3. Serve the admin dashboard only after that cookie is validated. Never
+     ship the admin bundle to anonymous visitors.
+  4. Store content in a real database (Supabase, Neon, D1) behind an
+     authenticated API — not in localStorage.
+  5. Add server-side rate limiting on login (per IP and per account), and
+     log every failed attempt.
+  6. Turn on HTTPS-only (HSTS) and set real security headers at the CDN:
+     Strict-Transport-Security, X-Content-Type-Options, Permissions-Policy.
+
+SHORT VERSION
+  This build is hardened for a static site and will stop anyone who is not
+  determined. If the studio ever handles real money, real user data, or
+  attracts real attackers, it needs a backend. There is no way around that.
+============================================================================
+-->
+</body>
+</html>
